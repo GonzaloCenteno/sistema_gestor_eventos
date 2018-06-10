@@ -1,0 +1,110 @@
+<?php
+
+namespace App\Http\Controllers\materiales;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+
+class MaterialesController extends Controller
+{
+    public function index()
+    {
+        $permisos = DB::select("SELECT * from permisos.vw_permisos where id_sistema='li_config_materiales' and id_usu=".Auth::user()->id);
+        $menu = DB::select('SELECT * from permisos.vw_permisos where id_usu='.Auth::user()->id);
+        if(count($permisos)==0)
+        {
+            return view('errors/sin_permiso',compact('menu','permisos'));
+        }
+        return view('materiales/vw_materiales',compact('menu','permisos'));
+    }
+
+    function autocompletar_nombre_persona(Request $request) 
+    {
+        $Consulta = DB::table('public.users')->get();
+        $todo = array();
+        foreach ($Consulta as $Datos) {
+            $Lista = new \stdClass();
+            $Lista->value = $Datos->id;
+            $Lista->label = trim($Datos->name);
+            array_push($todo, $Lista);
+        }
+        return response()->json($todo);
+    }
+
+    public function getMateriales(Request $request)
+    {
+        header('Content-type: application/json');
+        $page = $_GET['page'];
+        $limit = $_GET['rows'];
+        $sidx = $_GET['sidx'];
+        $sord = $_GET['sord'];
+        $start = ($limit * $page) - $limit; // do not put $limit*($page - 1)  
+        if ($start < 0) {
+            $start = 0;
+        }
+        $totalg = DB::select("select count(*) as total from configuracion.vw_materiales where tipo_materiales like '%".$request['materiales']."%'");
+        $sql = DB::table('configuracion.vw_materiales')->where('tipo_materiales','like', '%'.$request['materiales'].'%')->orderBy($sidx, $sord)->limit($limit)->offset($start)->get();
+
+        $total_pages = 0;
+        if (!$sidx) {
+            $sidx = 1;
+        }
+        $count = $totalg[0]->total;
+        if ($count > 0) {
+            $total_pages = ceil($count / $limit);
+        }
+        if ($page > $total_pages) {
+            $page = $total_pages;
+        }
+        $Lista = new \stdClass();
+        $Lista->page = $page;
+        $Lista->total = $total_pages;
+        $Lista->records = $count;
+        foreach ($sql as $Index => $Datos) {
+            $Lista->rows[$Index]['id'] = $Datos->id_material;            
+            $Lista->rows[$Index]['cell'] = array(
+                trim($Datos->id_material),
+                trim($Datos->tipo_materiales),
+                trim($Datos->name),
+                trim($Datos->break_man),
+                trim($Datos->break_tard),
+            );
+        }
+        return response()->json($Lista);
+    }
+
+    public function create(Request $request){
+
+        $id_persona = $request['id_persona'];
+        $tipo_materiales = $request['tipo_materiales'];
+        $break_man = $request['break_man'];
+        $break_tard = $request['break_tard'];
+
+        $crear_material = DB::select("select configuracion.crear_materiales(".$id_persona.",'".$tipo_materiales."','".$break_man."','".$break_tard."')");
+
+    }
+
+    public function show($id_material)
+    {
+       $Materiales = DB::table('configuracion.vw_materiales')->where('id_material',$id_material)->get();
+       return $Materiales;
+    }
+
+    public function edit($id_material,Request $request)
+    {
+        $id_persona = $request['id_persona'];
+        $tipo_materiales = $request['tipo_materiales'];
+        $break_man = $request['break_man'];
+        $break_tard = $request['break_tard'];
+
+        $editar_material = DB::select("select configuracion.modificar_materiales('".$id_material."',".$id_persona.",'".$tipo_materiales."','".$break_man."','".$break_tard."')");
+    }
+
+    public function destroy(Request $request)
+    {
+        $eliminar_material = DB::select("select configuracion.eliminar_materiales('".$request['id_material']."')");
+    }
+
+}
