@@ -12,10 +12,10 @@
                 <div class="col-xs-6">
                         <div class="input-group">
                             <div class="icon-addon addon-md">
-                                <input id="vw_buscar_materiales" type="text" class="form-control" placeholder="Ingresar Tipo de Material">
+                                <input id="vw_buscar_numero_recibo" type="text" class="form-control" placeholder="Ingresar Numero de Recibo">
                             </div>
                             <span class="input-group-btn">
-                                <button onclick="buscar_materiales();" type="button" class="btn btn-default btn-round"><i class="material-icons">search</i> Buscar</button>
+                                <button onclick="buscar_recibos();" type="button" class="btn btn-default btn-round"><i class="material-icons">search</i> Buscar</button>
                             </span>
                         </div>
                 </div>
@@ -32,7 +32,7 @@
                         </button>
                     @endif
                     @if( $permisos[0]->btn_edit ==1 )
-                        <button onclick="modificar_material();" type="button" class="btn btn-warning btn-round">
+                        <button onclick="modificar_recibo();" type="button" class="btn btn-warning btn-round">
                             <span class="btn-label"><i class="material-icons">create</i></span> Modificar
                         </button>
                     @else
@@ -41,7 +41,7 @@
                         </button>
                     @endif
                     @if( $permisos[0]->btn_del ==1 )
-                        <button onclick="eliminar_material();" data-token="{{ csrf_token() }}" type="button" class="btn btn-danger btn-round" id="btn_vw_materiales_eliminar">
+                        <button onclick="anular_recibo();" data-token="{{ csrf_token() }}" type="button" class="btn btn-danger btn-round" id="btn_vw_recibos_anular">
                             <span class="btn-label"><i class="material-icons">delete</i></span> Anular
                         </button>
                     @else
@@ -77,7 +77,7 @@
                         </div>
                         <div class="card-content">
 
-                            <input type="hidden" id="dlg_id_recibo">
+                            <input type="hidden" id="dlg_numero_recibo">
 
                             <div class="col-sm-12">
                                 <div class="input-group">
@@ -94,7 +94,7 @@
                                     <span class="input-group-addon">
                                         <i class="material-icons">settings</i>
                                     </span>
-                                    <input type="text" id="dlg_concepto" class="form-control" placeholder="CONCEPTO">
+                                    <input type="text" id="dlg_concepto" class="form-control" placeholder="CONCEPTO" maxlength="50">
                                 </div>
                             </div>
 
@@ -103,7 +103,7 @@
                                     <span class="input-group-addon">
                                         <i class="material-icons">settings</i>
                                     </span>
-                                    <input type="text" id="dlg_monto" class="form-control" placeholder="MONTO">
+                                    <input type="text" id="dlg_monto" class="form-control" placeholder="MONTO" onkeypress="return soloNumeroTab(event);">
                                 </div>
                             </div>
 
@@ -112,7 +112,7 @@
                                     <span class="input-group-addon">
                                         <i class="material-icons">settings</i>
                                     </span>
-                                    <input type="text" id="dlg_tipo" class="form-control" placeholder="TIPO RECIBO">
+                                    <input type="text" id="dlg_tipo" class="form-control" placeholder="TIPO RECIBO" maxlength="35">
                                 </div>
                             </div>
 
@@ -121,7 +121,7 @@
                                     <span class="input-group-addon">
                                         <i class="material-icons">settings</i>
                                     </span>
-                                    <input type="text" id="dlg_paquete" class="form-control" placeholder="TIPO PAQUETE">
+                                    <input type="text" id="dlg_paquete" class="form-control" placeholder="TIPO PAQUETE" maxlength="35">
                                 </div>
                             </div>
 

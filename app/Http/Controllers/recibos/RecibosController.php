@@ -31,8 +31,8 @@ class RecibosController extends Controller
         if ($start < 0) {
             $start = 0;
         }
-        $totalg = DB::select("select count(*) as total from tesoreria.vw_recibos where concepto like '%".$request['concepto']."%'");
-        $sql = DB::table('tesoreria.vw_recibos')->where('concepto','like', '%'.$request['concepto'].'%')->orderBy($sidx, $sord)->limit($limit)->offset($start)->get();
+        $totalg = DB::select("select count(*) as total from tesoreria.vw_recibos where numero_recibo like '%".$request['numero_recibo']."%'");
+        $sql = DB::table('tesoreria.vw_recibos')->where('numero_recibo','like', '%'.$request['numero_recibo'].'%')->orderBy($sidx, $sord)->limit($limit)->offset($start)->get();
 
         $total_pages = 0;
         if (!$sidx) {
@@ -68,6 +68,7 @@ class RecibosController extends Controller
                 trim($Datos->tipo_recibo),
                 trim($Datos->tipo_paquete),
                 $nuevo,
+                trim($Datos->estado),
             );
         }
         return response()->json($Lista);
@@ -85,19 +86,28 @@ class RecibosController extends Controller
 
     }
 
-    public function show($id_material)
+    public function show($numero_recibo)
     {
-       
+        $Recibos = DB::table('tesoreria.vw_recibos')->where('numero_recibo',$numero_recibo)->get();
+        return $Recibos;   
     }
 
-    public function edit($id_material,Request $request)
+    public function edit($numero_recibo,Request $request)
     {
-        
+        $id_persona = $request['id_persona'];
+        $concepto = $request['concepto'];
+        $monto = $request['monto'];
+        $tipo_recibo = $request['tipo_recibo'];
+        $tipo_paquete = $request['tipo_paquete'];
+
+        $editar_recibo = DB::select("select tesoreria.modificar_recibos('".$numero_recibo."',".$id_persona.",'".$concepto."',".$monto.",'".$tipo_recibo."','".$tipo_paquete."')");
     }
 
     public function destroy(Request $request)
     {
-        
+        $numero_recibo = $request['numero_recibo'];
+
+        $anular_recibo = DB::select("select tesoreria.anular_recibos('".$numero_recibo."')");
     }
 
 }

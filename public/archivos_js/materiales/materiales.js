@@ -225,7 +225,11 @@ function modificar_material()
             }],
         });
         $("#dialog_nuevo_material").dialog('open');
-
+        if(aux1==0)
+        {
+            autocompletar_nombre('persona');
+            aux1=1;
+        }
 
         MensajeDialogLoadAjax('dialog_nuevo_material', '.:: Cargando ...');
 

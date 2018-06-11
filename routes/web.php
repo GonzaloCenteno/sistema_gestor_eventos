@@ -63,3 +63,8 @@ Route::group(['namespace' => 'recibos'], function() {
         Route::resource('recibos', 'RecibosController');
         Route::get('getRecibos', 'RecibosController@getRecibos');
 });
+
+Route::group(['namespace' => 'caja'], function() {
+        Route::resource('caja', 'CajaController');
+        Route::get('getRecibosEmititos', 'CajaController@getRecibosEmititos');
+});

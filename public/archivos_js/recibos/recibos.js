@@ -9,7 +9,7 @@ $(document).ready(function () {
         datatype: 'json', mtype: 'GET',
         height: 'auto', autowidth: true,
         toolbarfilter: true,
-        colNames: ['Nº Recibo', 'Persona', 'Concepto', 'Total', 'Tipo', 'Paquete', 'Estado'],
+        colNames: ['Nº Recibo', 'Persona', 'Concepto', 'Total', 'Tipo', 'Paquete', 'Estado','est'],
         rowNum: 10, sortname: 'numero_recibo', sortorder: 'desc', viewrecords: true, caption: 'LISTA DE RECIBOS REGISTRADOS', align: "center",
         colModel: [
             {name: 'numero_recibo', index: 'numero_recibo', width: 20},
@@ -19,7 +19,7 @@ $(document).ready(function () {
             {name: 'tipo_recibo', index: 'tipo_recibo', align: 'center', width: 50},
             {name: 'tipo_paquete', index: 'tipo_paquete', align: 'center', width: 50},
             {name: 'nuevo', index: 'nuevo', align: 'center', width: 40},
-            
+            {name: 'estado', index: 'estado', align: 'center', width: 10, hidden:true},
         ],
         pager: '#pager_table_Recibos',
         rowList: [5, 10, 15, 20],
@@ -32,13 +32,13 @@ $(document).ready(function () {
         },
         onSelectRow: function (Id) {},
         ondblClickRow: function (Id) {
-            modificar_material();
+            modificar_recibo();
         }
     });
 
-    $("#vw_buscar_materiales").keypress(function (e) {
+    $("#vw_buscar_numero_recibo").keypress(function (e) {
             if (e.which == 13) {
-                buscar_materiales();
+                buscar_recibos();
             }
     });
 
@@ -182,29 +182,30 @@ function guardar_editar_recibo(tipo) {
     }
     else if (tipo == 2) {
 
-        id_material = $("#dlg_id_material").val();
+        numero_recibo = $("#dlg_numero_recibo").val();
 
-        MensajeDialogLoadAjax('table_Materiales', '.:: Cargando ...');
+        MensajeDialogLoadAjax('table_Recibos', '.:: Cargando ...');
         $.ajax({
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            url: 'materiales/'+id_material+'/edit',
+            url: 'recibos/'+numero_recibo+'/edit',
             type: 'GET',
             data: {
                 id_persona:id_persona,
-                tipo_materiales:tipo_materiales,
-                break_man:break_man,
-                break_tard:break_tard
+                concepto:concepto,
+                monto:monto,
+                tipo_recibo:tipo_recibo,
+                tipo_paquete:tipo_paquete
             },
             success: function(r) 
             {
                 MensajeExito("Se Modifico Correctamente","Su Registro Fue Modificado Correctamente...","top","right","success");
-                MensajeDialogLoadAjaxFinish('table_Materiales');
-                fn_actualizar_grilla('table_Materiales');
-                $("#dialog_nuevo_material").dialog("close");
+                MensajeDialogLoadAjaxFinish('table_Recibos');
+                fn_actualizar_grilla('table_Recibos');
+                $("#dialog_nuevo_recibo").dialog("close");
             },
             error: function(data) {
                 mostraralertas("hubo un error, Comunicar al Administrador");
-                MensajeDialogLoadAjaxFinish('table_Materiales');
+                MensajeDialogLoadAjaxFinish('table_Recibos');
                 console.log('error');
                 console.log(data);
             }
@@ -213,20 +214,20 @@ function guardar_editar_recibo(tipo) {
  
 }
 
-function modificar_material()
+function modificar_recibo()
 {
-    id_material = $('#table_Materiales').jqGrid ('getGridParam', 'selrow');
+    numero_recibo = $('#table_Recibos').jqGrid ('getGridParam', 'selrow');
 
-    if (id_material) {
+    if (numero_recibo) {
 
-        $("#dialog_nuevo_material").dialog({
+        $("#dialog_nuevo_recibo").dialog({
             autoOpen: false, modal: true, width: 600, show: {effect: "fade", duration: 300}, resizable: false,
-            title: ".: EDITAR MATERIAL :.",
+            title: ".: EDITAR RECIBO :.",
             buttons: [{
                 html: "<i class='fa fa-save'></i>&nbsp; Guardar",
                 "class": "btn btn-success bg-color-green",
                 click: function () {
-                    guardar_editar_material(2);
+                    guardar_editar_recibo(2);
                 }
             }, {
                 html: "<i class='fa fa-sign-out'></i>&nbsp; Salir",
@@ -236,47 +237,60 @@ function modificar_material()
                 }
             }],
         });
-        $("#dialog_nuevo_material").dialog('open');
+        $("#dialog_nuevo_recibo").dialog('open');
 
+        if(aux2==0)
+        {
+            autocompletar_nombre('persona');
+            aux2=1;
+        }
 
-        MensajeDialogLoadAjax('dialog_nuevo_material', '.:: Cargando ...');
+        MensajeDialogLoadAjax('dialog_nuevo_recibo', '.:: Cargando ...');
 
-        $.ajax({url: 'materiales/'+id_material,
+        $.ajax({url: 'recibos/'+numero_recibo,
             type: 'GET',
             success: function(datos)
             {
-                $("#dlg_id_material").val(datos[0].id_material);
+                $("#dlg_numero_recibo").val(datos[0].numero_recibo);
                 $("#hiddenpersona").val(datos[0].id_persona);
                 $("#persona").val(datos[0].name);
-                $("#dlg_tipo_material").val(datos[0].tipo_materiales);
-                $("#dlg_break_man").val(datos[0].break_man);
-                $("#dlg_break_tar").val(datos[0].break_tard);
-                MensajeDialogLoadAjaxFinish('dialog_nuevo_material');
+                $("#dlg_concepto").val(datos[0].concepto);
+                $("#dlg_monto").val(datos[0].monto_total);
+                $("#dlg_tipo").val(datos[0].tipo_recibo);
+                $("#dlg_paquete").val(datos[0].tipo_paquete);
+                MensajeDialogLoadAjaxFinish('dialog_nuevo_recibo');
 
             },
             error: function(data) {
                 mostraralertas("Hubo un Error, Comunicar al Administrador");
                 console.log('error');
                 console.log(data);
-                MensajeDialogLoadAjaxFinish('dialog_nuevo_material');
+                MensajeDialogLoadAjaxFinish('dialog_nuevo_recibo');
             }
         });
     }else{
-        mostraralertasconfoco("No Hay Registros Seleccionados","#table_Materiales");
+        mostraralertasconfoco("No Hay Registros Seleccionados","#table_Recibos");
     }
 }
 
-function eliminar_material(){
-    id_material = $('#table_Materiales').jqGrid ('getGridParam', 'selrow');
+function anular_recibo(){
+    numero_recibo = $('#table_Recibos').jqGrid ('getGridParam', 'selrow');
+    estado = $('#table_Recibos').jqGrid ('getCell', numero_recibo, 'estado');
 
-    if(id_material == null)
+    if(numero_recibo == null)
     {
-        mostraralertasconfoco("No hay Registros seleccionados","#table_Materiales");
+        mostraralertasconfoco("No hay Registros seleccionados","#table_Recibos");
+        return false;
+    }
+
+    if(estado == 2)
+    {
+        mostraralertasconfoco("El Recibo ya fue Anulado","#table_Recibos");
         return false;
     }
 
     swal({
-          title: '¿Está Seguro que desea Eliminar El Material?',
+          title: '¿Está Seguro que desea Anular El Recibo?',
           text: "Los Cambios no se podran revertir!",
           type: 'warning',
           showCancelButton: true,
@@ -289,7 +303,7 @@ function eliminar_material(){
           buttonsStyling: false,
           reverseButtons: true
         }).then(function(result) {
-              fn_elimiar_material();
+              fn_anular_recibo();
             }, function(dismiss) {
               MensajeExito("Mensaje del Sistema","Operacion Cancelada","top","right","danger");
             });
@@ -297,23 +311,23 @@ function eliminar_material(){
         audio_1.play();
 }
 
-function fn_elimiar_material() {
-    id_material = $('#table_Materiales').jqGrid ('getGridParam', 'selrow');
+function fn_anular_recibo() {
+    numero_recibo = $('#table_Recibos').jqGrid ('getGridParam', 'selrow');
 
     $.ajax({
-        url: 'materiales/destroy',
+        url: 'recibos/destroy',
         type: 'POST',
-        data: {_method: 'delete',_token:$("#btn_vw_materiales_eliminar").data('token'),id_material: id_material},
+        data: {_method: 'delete',_token:$("#btn_vw_recibos_anular").data('token'),numero_recibo: numero_recibo},
         success: function (data) {
             MensajeAlerta("Se Eliminó Correctamente","Su Registro Fue eliminado Correctamente...","top","right","success");
-            fn_actualizar_grilla('table_Materiales');
+            fn_actualizar_grilla('table_Recibos');
         }, error: function (data) {
             MensajeAlerta('* Error.', 'Contactese con el Administrador.');
         }
     });
 }
 
-function buscar_materiales(){
-    materiales = $("#vw_buscar_materiales").val();
-    fn_actualizar_grilla('table_Materiales','getMateriales?materiales='+materiales);
+function buscar_recibos(){
+    numero_recibo = $("#vw_buscar_numero_recibo").val();
+    fn_actualizar_grilla('table_Recibos','getRecibos?numero_recibo='+numero_recibo);
 }
