@@ -20,19 +20,6 @@ class MaterialesController extends Controller
         return view('materiales/vw_materiales',compact('menu','permisos'));
     }
 
-    function autocompletar_nombre_persona(Request $request) 
-    {
-        $Consulta = DB::table('public.users')->get();
-        $todo = array();
-        foreach ($Consulta as $Datos) {
-            $Lista = new \stdClass();
-            $Lista->value = $Datos->id;
-            $Lista->label = trim($Datos->name);
-            array_push($todo, $Lista);
-        }
-        return response()->json($todo);
-    }
-
     public function getMateriales(Request $request)
     {
         header('Content-type: application/json');
@@ -44,8 +31,8 @@ class MaterialesController extends Controller
         if ($start < 0) {
             $start = 0;
         }
-        $totalg = DB::select("select count(*) as total from configuracion.vw_materiales where tipo_materiales like '%".$request['materiales']."%'");
-        $sql = DB::table('configuracion.vw_materiales')->where('tipo_materiales','like', '%'.$request['materiales'].'%')->orderBy($sidx, $sord)->limit($limit)->offset($start)->get();
+        $totalg = DB::select("select count(*) as total from vw_materiales where nombre_material like '%".$request['materiales']."%'");
+        $sql = DB::table('vw_materiales')->where('nombre_material','like', '%'.$request['materiales'].'%')->orderBy($sidx, $sord)->limit($limit)->offset($start)->get();
 
         $total_pages = 0;
         if (!$sidx) {
@@ -66,10 +53,10 @@ class MaterialesController extends Controller
             $Lista->rows[$Index]['id'] = $Datos->id_material;            
             $Lista->rows[$Index]['cell'] = array(
                 trim($Datos->id_material),
-                trim($Datos->tipo_materiales),
-                trim($Datos->name),
-                trim($Datos->break_man),
-                trim($Datos->break_tard),
+                trim($Datos->nombre_material),
+                trim($Datos->tipo_material),
+                trim($Datos->sctock),
+                trim($Datos->id_pers),
             );
         }
         return response()->json($Lista);
@@ -77,34 +64,32 @@ class MaterialesController extends Controller
 
     public function create(Request $request){
 
-        $id_persona = $request['id_persona'];
-        $tipo_materiales = $request['tipo_materiales'];
-        $break_man = $request['break_man'];
-        $break_tard = $request['break_tard'];
+        $nombre_material = $request['nombre_material'];
+        $tipo_material = $request['tipo_material'];
+        $stock = $request['stock'];
 
-        $crear_material = DB::select("select configuracion.crear_materiales(".$id_persona.",'".$tipo_materiales."','".$break_man."','".$break_tard."')");
+        $crear_material = DB::select("select crear_materiales('".$nombre_material."', '".$tipo_material."', ".$stock.", ". Auth::user()->id .")");
 
     }
 
     public function show($id_material)
     {
-       $Materiales = DB::table('configuracion.vw_materiales')->where('id_material',$id_material)->get();
+       $Materiales = DB::table('vw_materiales')->where('id_material',$id_material)->get();
        return $Materiales;
     }
 
     public function edit($id_material,Request $request)
     {
-        $id_persona = $request['id_persona'];
-        $tipo_materiales = $request['tipo_materiales'];
-        $break_man = $request['break_man'];
-        $break_tard = $request['break_tard'];
+        $nombre_material = $request['nombre_material'];
+        $tipo_material = $request['tipo_material'];
+        $stock = $request['stock'];
 
-        $editar_material = DB::select("select configuracion.modificar_materiales('".$id_material."',".$id_persona.",'".$tipo_materiales."','".$break_man."','".$break_tard."')");
+        $editar_material = DB::select("select modificar_materiales(".$id_material.", '".$nombre_material."', '".$tipo_material."', ".$stock.")");
     }
 
     public function destroy(Request $request)
     {
-        $eliminar_material = DB::select("select configuracion.eliminar_materiales('".$request['id_material']."')");
+        $eliminar_material = DB::select("select eliminar_materiales('".$request['id_material']."')");
     }
 
 }

@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::get('principal', function () {
+    return view('principal.contenido');
+});
+
 $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
 $this->post('login', 'Auth\LoginController@login');
 $this->get('logout', 'Auth\LoginController@logout')->name('logout');
@@ -56,7 +60,7 @@ Route::group(['namespace' => 'auditorios'], function() {
 Route::group(['namespace' => 'materiales'], function() {
         Route::resource('materiales', 'MaterialesController');
         Route::get('getMateriales', 'MaterialesController@getMateriales');
-        Route::get('autocompletar_nombre_persona', 'MaterialesController@autocompletar_nombre_persona');
+        //Route::get('autocompletar_nombre_persona', 'MaterialesController@autocompletar_nombre_persona');
 });
 
 Route::group(['namespace' => 'recibos'], function() {

@@ -12,7 +12,7 @@
                 <div class="col-xs-6">
                         <div class="input-group">
                             <div class="icon-addon addon-md">
-                                <input id="vw_buscar_materiales" type="text" class="form-control" placeholder="Ingresar Tipo de Material">
+                                <input id="vw_buscar_materiales" type="text" class="form-control" placeholder="Buscar por Nombre de Material">
                             </div>
                             <span class="input-group-btn">
                                 <button onclick="buscar_materiales();" type="button" class="btn btn-default btn-round"><i class="material-icons">search</i> Buscar</button>
@@ -78,42 +78,31 @@
                         <div class="card-content">
 
                             <input type="hidden" id="dlg_id_material">
-
+                            
                             <div class="col-sm-12">
                                 <div class="input-group">
                                     <span class="input-group-addon">
                                         <i class="material-icons">settings</i>
                                     </span>
-                                    <input type="hidden" id="hiddenpersona" value="0">
-                                    <input type="text" id="persona" class="form-control" placeholder="NOMBRE PERSONA">
+                                    <input type="text" id="dlg_nombre_material" maxlength="10" class="form-control" placeholder="NOMBRE MATERIAL">
                                 </div>
                             </div>
-
+                            
                             <div class="col-sm-12">
                                 <div class="input-group">
                                     <span class="input-group-addon">
                                         <i class="material-icons">settings</i>
                                     </span>
-                                    <input type="text" id="dlg_tipo_material" class="form-control" placeholder="TIPO MATERIAL">
+                                    <input type="text" id="dlg_tipo_material" maxlength="10" class="form-control" placeholder="TIPO MATERIAL">
                                 </div>
                             </div>
-
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="material-icons">settings</i>
-                                        </span>
-                                        <input type="text" id="dlg_break_man" class="form-control" placeholder="BREAK MAÑANA">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="material-icons">settings</i>
-                                        </span>
-                                        <input type="text" id="dlg_break_tar" class="form-control" placeholder="BREAK TARDE">
-                                    </div>
+                            
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="material-icons">settings</i>
+                                    </span>
+                                    <input type="text" id="dlg_stock" class="form-control" placeholder="STOCK DEL MATERIAL" onkeypress="return soloNumeroTab(event);">
                                 </div>
                             </div>
 

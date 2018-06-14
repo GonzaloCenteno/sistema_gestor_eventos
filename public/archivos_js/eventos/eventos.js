@@ -261,7 +261,7 @@ function actualizar_evento(id_evento)
     Evento.find('#crear_evento').hide();
 
         $.ajax({
-            url: 'evento/'+id_evento,
+            url: 'eventos/'+id_evento,
             type: 'GET',
             success: function(r) 
             {

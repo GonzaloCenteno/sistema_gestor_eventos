@@ -9,14 +9,14 @@ $(document).ready(function () {
         datatype: 'json', mtype: 'GET',
         height: 'auto', autowidth: true,
         toolbarfilter: true,
-        colNames: ['ID', 'Tipo Material', 'Persona', 'Break Man', 'Break Tard'],
+        colNames: ['ID', 'Nombre Material', 'Tipo Material', 'Stock', 'Usuario'],
         rowNum: 10, sortname: 'id_material', sortorder: 'desc', viewrecords: true, caption: 'LISTA DE MATERIALES REGISTRADOS', align: "center",
         colModel: [
             {name: 'id_material', index: 'id_material', hidden: true},
-            {name: 'tipo_materiales', index: 'tipo_materiales', align: 'center', width: 50},
-            {name: 'name', index: 'name', align: 'center', width: 100},
-            {name: 'break_man', index: 'break_man', align: 'center', width: 10},
-            {name: 'break_tard', index: 'break_tard', align: 'center', width: 10},
+            {name: 'nombre_material', index: 'nombre_material', align: 'center', width: 80},
+            {name: 'tipo_material', index: 'tipo_material', align: 'center', width: 70},
+            {name: 'sctock', index: 'sctock', align: 'center', width: 15},
+            {name: 'id_pers', index: 'id_pers', align: 'center', width: 70}
         ],
         pager: '#pager_table_Materiales',
         rowList: [5, 10, 15, 20],
@@ -41,37 +41,10 @@ $(document).ready(function () {
 
 });
 
-var aux1=0;
-function autocompletar_nombre(textbox){
-    $.ajax({
-        type: 'GET',
-        url: 'autocompletar_nombre_persona',
-        success: function (data) {
-            var $datos = data;
-            $("#persona").autocomplete({
-                source: $datos,
-                focus: function (event, ui) {
-                    $("#" + textbox).val(ui.item.label);
-                    $("#hidden" + textbox).val(ui.item.value);
-                    $("#" + textbox).attr('maxlength', ui.item.label.length);
-                    return false;
-                },
-                select: function (event, ui) {
-                    $("#" + textbox).val(ui.item.label);
-                    $("#hidden" + textbox).val(ui.item.value);
-                    
-                    return false;
-                }
-            });
-        }
-    });
-}
-
 function limpiar_formulario() {
-    $("#persona").val('');
+    $("#dlg_nombre_material").val('');
     $("#dlg_tipo_material").val('');
-    $("#dlg_break_man").val('');
-    $("#dlg_break_tar").val('');
+    $("#dlg_stock").val('');
 }
 
 
@@ -101,43 +74,29 @@ function nuevo_material() {
             limpiar_formulario();
         }
     }).dialog('open');
-
-    if(aux1==0)
-    {
-        autocompletar_nombre('persona');
-        aux1=1;
-    }
 }
 
 function guardar_editar_material(tipo) {
 
-    id_persona = $("#hiddenpersona").val();
-    persona = $("#persona").val();
-    tipo_materiales = $("#dlg_tipo_material").val();
-    break_man = $("#dlg_break_man").val();
-    break_tard = $("#dlg_break_tar").val();
-
-    if(persona == "")
+    nombre_material = $("#dlg_nombre_material").val();
+    tipo_material = $("#dlg_tipo_material").val();
+    stock = $("#dlg_stock").val();
+    
+    if(nombre_material == "")
     {
-        mostraralertasconfoco("* El Campo Persona es Obligatorio","#persona");
+        mostraralertasconfoco("* El Campo Nombre Material es Obligatorio","#dlg_nombre_material");
         return false;
     }
 
-    if(tipo_materiales == "")
+    if(tipo_material == "")
     {
-        mostraralertasconfoco("* El Campo Tipo Material es Obligatorio","#dlg_tipo_material");
+        mostraralertasconfoco("* El Campo Tipo Material es Obligatorio","#tipo_material");
         return false;
     }
 
-    if(break_man == "")
+    if(stock == "")
     {
-        mostraralertasconfoco("* El Campo Tipo Break Mañana es Obligatorio","#dlg_break_man");
-        return false;
-    }
-
-    if(break_tard == "")
-    {
-        mostraralertasconfoco("* El Campo Tipo Break Tarde es Obligatorio","#dlg_break_tar");
+        mostraralertasconfoco("* El Campo Stock es Obligatorio","#dlg_stock");
         return false;
     }
 
@@ -148,10 +107,9 @@ function guardar_editar_material(tipo) {
             url: 'materiales/create',
             type: 'GET',
             data: {
-                id_persona:id_persona,
-                tipo_materiales:tipo_materiales,
-                break_man:break_man,
-                break_tard:break_tard
+                nombre_material:nombre_material,
+                tipo_material:tipo_material,
+                stock:stock
             },
             success: function(r) 
             {
@@ -178,10 +136,9 @@ function guardar_editar_material(tipo) {
             url: 'materiales/'+id_material+'/edit',
             type: 'GET',
             data: {
-                id_persona:id_persona,
-                tipo_materiales:tipo_materiales,
-                break_man:break_man,
-                break_tard:break_tard
+                nombre_material:nombre_material,
+                tipo_material:tipo_material,
+                stock:stock
             },
             success: function(r) 
             {
@@ -225,11 +182,6 @@ function modificar_material()
             }],
         });
         $("#dialog_nuevo_material").dialog('open');
-        if(aux1==0)
-        {
-            autocompletar_nombre('persona');
-            aux1=1;
-        }
 
         MensajeDialogLoadAjax('dialog_nuevo_material', '.:: Cargando ...');
 
@@ -238,11 +190,9 @@ function modificar_material()
             success: function(datos)
             {
                 $("#dlg_id_material").val(datos[0].id_material);
-                $("#hiddenpersona").val(datos[0].id_persona);
-                $("#persona").val(datos[0].name);
-                $("#dlg_tipo_material").val(datos[0].tipo_materiales);
-                $("#dlg_break_man").val(datos[0].break_man);
-                $("#dlg_break_tar").val(datos[0].break_tard);
+                $("#dlg_nombre_material").val(datos[0].nombre_material);
+                $("#dlg_tipo_material").val(datos[0].tipo_material);
+                $("#dlg_stock").val(datos[0].sctock);
                 MensajeDialogLoadAjaxFinish('dialog_nuevo_material');
 
             },
@@ -260,15 +210,17 @@ function modificar_material()
 
 function eliminar_material(){
     id_material = $('#table_Materiales').jqGrid ('getGridParam', 'selrow');
-
+    
     if(id_material == null)
     {
         mostraralertasconfoco("No hay Registros seleccionados","#table_Materiales");
         return false;
     }
-
+    
+    nombre_material = $('#table_Materiales').jqGrid ('getCell', id_material, 'nombre_material');
+    
     swal({
-          title: '¿Está Seguro que desea Eliminar El Material?',
+          title: '¿Está Seguro que desea Eliminar El Material ' + nombre_material + ' ?',
           text: "Los Cambios no se podran revertir!",
           type: 'warning',
           showCancelButton: true,
