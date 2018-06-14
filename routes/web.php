@@ -72,3 +72,8 @@ Route::group(['namespace' => 'caja'], function() {
         Route::resource('caja', 'CajaController');
         Route::get('getRecibosEmititos', 'CajaController@getRecibosEmititos');
 });
+Route::group(['namespace' => 'actividad'], function() {
+        Route::resource('actividad', 'ActividadController');
+        Route::get('getActividad', 'MaterialesController@getMateriales');
+        //Route::get('autocompletar_nombre_persona', 'MaterialesController@autocompletar_nombre_persona');
+});

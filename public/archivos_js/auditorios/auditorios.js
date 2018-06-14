@@ -4,17 +4,19 @@ $(document).ready(function () {
     $("#menu_configuracion").addClass('open');
     $("#menu_configuracion").css({ 'background-color' : '#9930B0', 'border-radius' : '20px' });
 
-    jQuery("#table_Auditorios").jqGrid({
+    jQuery("#table_Actividad").jqGrid({
         url: 'getAuditorios',
         datatype: 'json', mtype: 'GET',
         height: 'auto', autowidth: true,
         toolbarfilter: true,
-        colNames: ['ID', 'Capacidad', 'Ubicacion'],
+        colNames: ['ID','Nombre', ],
         rowNum: 10, sortname: 'id_auditorio', sortorder: 'desc', viewrecords: true, caption: 'LISTA DE AUDITORIOS REGISTRADOS', align: "center",
         colModel: [
             {name: 'id_auditorio', index: 'id_auditorio', hidden: true},
-            {name: 'capacidad', index: 'capacidad', align: 'center', width: 100},
-            {name: 'ubicacion', index: 'ubicacion', align: 'center', width: 100}
+             {name: 'nombre_auditorio', index: 'nombre_auditorio', align: 'center', width: 20},
+            {name: 'capacidad', index: 'capacidad', align: 'center', width: 20},
+            {name: 'disponibilidad', index: 'disponibilidad', align: 'center', width: 20},
+            {name: 'ubicacion', index: 'ubicacion', align: 'center', width: 20}
         ],
         pager: '#pager_table_Auditorios',
         rowList: [5, 10, 15, 20],
@@ -78,7 +80,9 @@ function nuevo_auditorio() {
 function guardar_editar_auditorio(tipo) {
 
     capacidad = $("#dlg_capacidad").val();
+    disponibilidad = $("#dlg_disp").val();
     ubicacion = $("#dlg_ubicacion").val();
+    nombre = $("#dlg_nombre").val();
 
     if(capacidad == "")
     {
@@ -91,6 +95,12 @@ function guardar_editar_auditorio(tipo) {
         mostraralertasconfoco("* El Campo Ubicacion es Obligatorio","#dlg_ubicacion");
         return false;
     }
+      if(nombre == "")
+    {
+        mostraralertasconfoco("* El Campo nombre es Obligatorio","#dlg_nombre");
+        return false;
+    }
+
 
     if (tipo == 1) {
         MensajeDialogLoadAjax('table_Auditorios', '.:: Cargando ...');
@@ -99,8 +109,11 @@ function guardar_editar_auditorio(tipo) {
             url: 'auditorios/create',
             type: 'GET',
             data: {
+                nombre:nombre,
+                disponibilidad:disponibilidad,
                 capacidad:capacidad,
-                ubicacion:ubicacion
+                ubicacion:ubicacion,
+               
             },
             success: function(r) 
             {

@@ -31,8 +31,8 @@ class AuditoriosController extends Controller
         if ($start < 0) {
             $start = 0;
         }
-        $totalg = DB::select("select count(*) as total from configuracion.vw_auditorios where capacidad like '%".$request['auditorios']."%'");
-        $sql = DB::table('configuracion.vw_auditorios')->where('capacidad','like', '%'.$request['auditorios'].'%')->orderBy($sidx, $sord)->limit($limit)->offset($start)->get();
+        $totalg = DB::select("select count(*) as total from vw_auditorios where capacidad like '%".$request['auditorios']."%'");
+        $sql = DB::table('vw_auditorios')->where('capacidad','like', '%'.$request['auditorios'].'%')->orderBy($sidx, $sord)->limit($limit)->offset($start)->get();
 
         $total_pages = 0;
         if (!$sidx) {
@@ -53,7 +53,9 @@ class AuditoriosController extends Controller
             $Lista->rows[$Index]['id'] = $Datos->id_auditorio;            
             $Lista->rows[$Index]['cell'] = array(
                 trim($Datos->id_auditorio),
+                trim($Datos->nombre_auditorio),
                 trim($Datos->capacidad),
+                 trim($Datos->disponibilidad),
                 trim($Datos->ubicacion),
             );
         }
@@ -64,8 +66,10 @@ class AuditoriosController extends Controller
 
         $capacidad = $request['capacidad'];
         $ubicacion = $request['ubicacion'];
+        $nombre = $request['nombre'];
+        $disponibilidad = $request['disponibilidad'];
 
-        $crear_auditorio = DB::select("select configuracion.crear_auditorios('".$capacidad."','".$ubicacion."')");
+        $crear_auditorio = DB::select("select crear_auditorios('".$nombre."','".$disponibilidad."','".$capacidad."','".$ubicacion."', ". Auth::user()->id .")");
 
     }
 
