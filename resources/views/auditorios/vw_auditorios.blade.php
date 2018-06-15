@@ -84,6 +84,7 @@
                                     <input type="text" id="dlg_nombre" class="form-control" placeholder="NOMBRE DEL AUDITORIO">
                                 </div>
                             </div>
+                            
                             <div class="col-sm-12">
                                 <div class="input-group">
                                     <span class="input-group-addon">
