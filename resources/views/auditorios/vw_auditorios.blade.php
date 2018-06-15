@@ -63,7 +63,6 @@
 </div>
 
 <script src="{{ asset('archivos_js/auditorios/auditorios.js') }}"></script>
-
 <!-- MANTENIMIENTO DE USUARIOS -->
 
 <div id="dialog_nuevo_auditorio" style="display: none">
