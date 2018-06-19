@@ -4,133 +4,152 @@
 
 @section('content')
 <div class="header header-filter" style="background-image: url('{{ asset('img/city.jpg') }}'); background-size: cover; background-position: top center;">
-    <div class="container">
+    <div class="container" id="contenedor">
         <div class="row">
-            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+            <div class="col-md-10 col-md-offset-1 col-sm-6 col-sm-offset-3">
                 <div class="card card-signup">
-                    <form class="form" method="POST" action="{{ route('register') }}">
-                        {{ csrf_field() }}
 
                         <div class="header header-primary text-center">
-                            <h4>Registro</h4>
-                            <!-- <div class="social-line">
-                                <a href="#pablo" class="btn btn-simple btn-just-icon">
-                                    <i class="fa fa-facebook-square"></i>
-                                </a>
-                                <a href="#pablo" class="btn btn-simple btn-just-icon">
-                                    <i class="fa fa-twitter"></i>
-                                </a>
-                                <a href="#pablo" class="btn btn-simple btn-just-icon">
-                                    <i class="fa fa-google-plus"></i>
-                                </a>
-                            </div> -->
+                            <h4>REGISTRO DE USUARIO</h4>
                         </div>
-                        <p class="text-divider">Completa tus Datos</p>
+                        <p class="text-divider">COMPLETA TUS DATOS</p>
                         <div class="content">
-
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <i class="material-icons">face</i>
-                                </span>
-                                <input type="text" placeholder="Nombre..." class="form-control" name="name" value="{{ old('name') }}" required autofocus>
+                            
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">face</i>
+                                        </span>
+                                        <input type="text" placeholder="NOMBRES" id="nombre" class="form-control text-uppercase" value="{{ old('name') }}">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">face</i>
+                                        </span>
+                                        <input type="text" placeholder="APELLIDO PATERNO" id="apaterno" class="form-control text-uppercase" value="{{ old('name') }}">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">face</i>
+                                        </span>
+                                        <input type="text" placeholder="APELLIDO MATERNO" id="amaterno" class="form-control text-uppercase" value="{{ old('name') }}">
+                                    </div>
+                                </div>
                             </div>
-
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <i class="material-icons">email</i>
-                                </span>
-                                <input id="email" type="email" placeholder="Correo Electronico..." class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+                            
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">book</i>
+                                        </span>
+                                        <div class="form-group">
+                                            <label for="exampleFormControlSelect1">TIPO PERSONA</label>
+                                            <select class="form-control" id="tipo_persona">
+                                                <option value='ESTUDIANTE' >ESTUDIANTE</option>
+                                                <option value='PROFESIONAL' >PROFESIONAL</option>
+                                                <option value='PERSONA NATURAL' >PERSONA NATURAL</option>
+                                            </select>
+                                          </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">book</i>
+                                        </span>
+                                        <div class="form-group">
+                                            <label for="exampleFormControlSelect2">NACIONALIDAD</label>
+                                            <select class="form-control" id="nacionalidad">
+                                                <option value='PERUANA' >PERUANA</option>
+                                                <option value='EUROPEA' >EUROPEA</option>
+                                                <option value='ESTADO UNIDENSE' >ESTADO UNIDENSE</option>
+                                            </select>
+                                          </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">book</i>
+                                        </span>
+                                        <div class="form-group">
+                                            <label for="exampleFormControlSelect3">TIPO DOCUMENTO</label>
+                                            <select class="form-control" id="tipo_documento">
+                                                <option value='DNI' >DNI</option>
+                                                <option value='RUC' >RUC</option>
+                                                <option value='CARNET EXTRANJERIA' >CARNET EXTRANJERIA</option>
+                                            </select>
+                                          </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">email</i>
+                                        </span>
+                                        <input id="email" type="email" placeholder="CORREO ELECTRONICO" class="form-control" value="{{ old('email') }}">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">featured_play_list</i>
+                                        </span>
+                                        <input id="numero_identidad" type="text" placeholder="NUMERO IDENTIDAD" class="form-control" value="{{ old('email') }}" onkeypress="return soloNumeroTab(event);">
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="input-group">
                                 <span class="input-group-addon">
                                     <i class="material-icons">lock_outline</i>
                                 </span>
-                                <input placeholder="Contraseña..." id="password" type="password" class="form-control" name="password" required />
-                            </div>
-
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <i class="material-icons">lock_outline</i>
-                                </span>
-                                <input placeholder="Confirmar Contraseña..." type="password" class="form-control" name="password_confirmation" required />
+                                <input placeholder="CONTRASEÑA" id="password" type="password" class="form-control"/>
                             </div>
 
                         </div>
-                        <div class="footer text-center">
-                            <button type="submit" class="btn btn-simple btn-primary btn-lg">Confirmar Registro</button>
+                        
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="footer text-center">
+                                    <a type="button" href="login" class="btn btn-danger btn-lg">LOGUEARSE</a>
+                                </div>
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <div class="footer text-center">
+                                    <button type="button" onclick="registrar_persona()" class="btn btn-primary btn-lg">Confirmar Registro</button>
+                                </div>
+                            </div>
                         </div>
-                    </form>
                 </div>
-            </div>
+                
+                <div style="display:none;">
+                <audio id="audio_smallbox" controls>
+                <source type="audio/mp3" src="{{ asset('sound/smallbox.mp3') }}">
+                </audio>
+                <audio id="audio_messagebox" controls>
+                <source type="audio/mp3" src="{{ asset('sound/messagebox.mp3') }}">
+                </audio>
+                </div>
+                </div>
         </div>
     </div>
-
-    @include('includes.footer')
 
 </div>
 
-
-
-<!-- <form class="form-horizontal" method="POST" action="{{ route('register') }}">
-                        {{ csrf_field() }}
-
-    <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-        <label for="name" class="col-md-4 control-label">Name</label>
-
-        <div class="col-md-6">
-            <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
-
-            @if ($errors->has('name'))
-                <span class="help-block">
-                    <strong>{{ $errors->first('name') }}</strong>
-                </span>
-            @endif
-        </div>
-    </div>
-
-    <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-        <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-
-        <div class="col-md-6">
-            <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
-
-            @if ($errors->has('email'))
-                <span class="help-block">
-                    <strong>{{ $errors->first('email') }}</strong>
-                </span>
-            @endif
-        </div>
-    </div>
-
-    <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-        <label for="password" class="col-md-4 control-label">Password</label>
-
-        <div class="col-md-6">
-            <input id="password" type="password" class="form-control" name="password" required>
-
-            @if ($errors->has('password'))
-                <span class="help-block">
-                    <strong>{{ $errors->first('password') }}</strong>
-                </span>
-            @endif
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
-
-        <div class="col-md-6">
-            <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-6 col-md-offset-4">
-            <button type="submit" class="btn btn-primary">
-                Register
-            </button>
-        </div>
-    </div>
-</form> -->
 @endsection

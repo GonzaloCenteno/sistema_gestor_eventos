@@ -1,8 +1,8 @@
 
 $(document).ready(function () {
     $("#li_config_eventos").addClass('active');
-    $("#menu_eventos").addClass('open');
-    $("#menu_eventos").css({ 'background-color' : '#9930B0', 'border-radius' : '20px' });
+    $("#menu_configuracion").addClass('open');
+    $("#menu_configuracion").css({ 'background-color' : '#9930B0', 'border-radius' : '20px' });
 
     // $.get('getEventos',
     //     function(data){
@@ -181,6 +181,9 @@ function limpiar_eventos(){
     evento = $("#mdl_nombre_evento").val('');
     hora_inicio = $("#mdl_hora_inicio").val('');
     hora_fin = $("#mdl_hora_fin").val('');
+    archivo = $("#mdl_img_evento").val(null);
+    tipo_evento = $("#mdl_tipo_evento").val('');
+    precio = $("#mdl_precio").val('');
 }
 
 jQuery(document).on("click", "#crear_evento", function(){
@@ -191,9 +194,25 @@ jQuery(document).on("click", "#crear_evento", function(){
     hora_inicio = $("#mdl_hora_inicio").val();
     hora_fin = $("#mdl_hora_fin").val();
     color = $("#mdl_color").val();
+    tipo_evento = $("#mdl_tipo_evento").val();
+    precio = $("#mdl_precio").val();
+    archivo = $("#mdl_img_evento").val();
+    paquetes = $("#mdl_paquetes").val();
 
     if (evento == "") {
         mostraralertasvalidacion("* El Campo Nombre es Obligatorio","#mdl_nombre_evento");
+        return false;
+    }
+    if (tipo_evento == "") {
+        mostraralertasvalidacion("* El Campo Tipo Evento es Obligatorio","#mdl_tipo_evento");
+        return false;
+    }
+    if (precio == "") {
+        mostraralertasvalidacion("* El Campo Precio es Obligatorio","#mdl_precio");
+        return false;
+    }
+    if (archivo == "") {
+        mostraralertasvalidacion("* La Imagen del Evento es Obligatorio","#mdl_img_evento");
         return false;
     }
     if (fecha_inicio == "") {
@@ -213,18 +232,15 @@ jQuery(document).on("click", "#crear_evento", function(){
         return false;
     }
 
-    
+    var form= new FormData($("#FormularioEvento")[0]);
     $.ajax({
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         url: 'createEvento',
-        type: 'GET',
-        data: {
-            evento:evento,
-            fecha_inicio:fecha_inicio,
-            fecha_fin:fecha_fin,
-            hora_inicio:hora_inicio,
-            hora_fin:hora_fin,
-            color:color
-        },
+        type: 'POST',
+        dataType: 'json',
+        data: form,
+        processData: false,
+        contentType: false,
         success: function(data) 
         {
             //alert(data[0].title);
@@ -259,19 +275,23 @@ function actualizar_evento(id_evento)
     Evento.find('#titulo').text('EDITAR EVENTO').show(); 
     Evento.find('#modificar_evento').text('MODIFICAR').show();
     Evento.find('#crear_evento').hide();
-
+    $("#mdl_img_evento").val(null);
+    
         $.ajax({
             url: 'eventos/'+id_evento,
             type: 'GET',
             success: function(r) 
             {
                 $("#id_evento").val(r[0].id_evento);
-                $("#mdl_nombre_evento").val(r[0].nombre);
+                $("#mdl_nombre_evento").val(r[0].nombre_evento);
                 $("#mdl_fecha_inicio").val(r[0].fecha_inicio);
                 $("#mdl_fecha_fin").val(r[0].fecha_fin);
                 $("#mdl_hora_inicio").val(r[0].hora_inicio);
                 $("#mdl_hora_fin").val(r[0].hora_fin);
                 $("#mdl_color").val(r[0].color);
+                $("#mdl_tipo_evento").val(r[0].tipo_evento);
+                $("#mdl_precio").val(r[0].precio);
+                $("#mdl_paquetes").val(r[0].id_paquete);
             },
             error: function(data) {
                 mostraralertas("hubo un error, Comunicar al Administrador");
@@ -291,9 +311,20 @@ jQuery(document).on("click", "#modificar_evento", function(){
     hora_inicio = $("#mdl_hora_inicio").val();
     hora_fin = $("#mdl_hora_fin").val();
     color = $("#mdl_color").val();
+    tipo_evento = $("#mdl_tipo_evento").val();
+    precio = $("#mdl_precio").val();
+    archivo = $("#mdl_img_evento").val();
 
     if (evento == "") {
         mostraralertasvalidacion("* El Campo Nombre es Obligatorio","#mdl_nombre_evento");
+        return false;
+    }
+    if (tipo_evento == "") {
+        mostraralertasvalidacion("* El Campo Tipo Evento es Obligatorio","#mdl_tipo_evento");
+        return false;
+    }
+    if (precio == "") {
+        mostraralertasvalidacion("* El Campo Precio es Obligatorio","#mdl_precio");
         return false;
     }
     if (fecha_inicio == "") {
@@ -313,18 +344,15 @@ jQuery(document).on("click", "#modificar_evento", function(){
         return false;
     }
 
-    
+    var form= new FormData($("#FormularioEvento")[0]);
     $.ajax({
-        url: 'evento/'+id_evento+'/edit',
-        type: 'GET',
-        data: {
-            evento:evento,
-            fecha_inicio:fecha_inicio,
-            fecha_fin:fecha_fin,
-            hora_inicio:hora_inicio,
-            hora_fin:hora_fin,
-            color:color
-        },
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        url: 'editar_evento/'+id_evento,
+        type: 'POST',
+        dataType: 'json',
+        data: form,
+        processData: false,
+        contentType: false,
         success: function(data) 
         {
             //alert(data[0].title);

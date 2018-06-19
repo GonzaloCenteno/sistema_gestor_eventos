@@ -464,7 +464,7 @@ function mostraralertasconfoco(texto, foco)
     
     swal({
           title: '<i>Mensaje del Sistema</i>',
-          type: 'info',
+          type: 'error',
           html:
             '<b>'+texto+'</b>',
           confirmButtonText:

@@ -15,8 +15,9 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('principal', function () {
-    return view('principal.contenido');
+
+Route::group(['namespace' => 'principal'], function() {
+        Route::resource('principal', 'PrincipalController');
 });
 
 $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
@@ -44,10 +45,16 @@ Route::group(['namespace' => 'permisos'], function() {
         Route::resource('permisos', 'Permisos_Modulo_UsuarioController');
 });
 
+Route::group(['namespace' => 'paquetes'], function() {
+        Route::resource('paquetes', 'PaquetesController');
+        Route::get('getPaquetes', 'PaquetesController@getPaquetes');
+});
+
 Route::group(['namespace' => 'eventos'], function() {
         Route::resource('eventos', 'EventosController');
         Route::get('getEventos', 'EventosController@getEventos');
-        Route::get('createEvento', 'EventosController@createEvento');
+        Route::post('createEvento', 'EventosController@createEvento');
+        Route::post('editar_evento/{id_evento}', 'EventosController@editar_evento');
         Route::get('updateFecha', 'EventosController@updateFecha');
         Route::get('deleteEvento', 'EventosController@deleteEvento');
 });

@@ -40,8 +40,12 @@ class LoginController extends Controller
     public function redirectTo()
     {
         if( \Auth::user() ){
-            
-            return '/usuarios';
+            if(\Auth::user()->estado == 0)
+            {
+                return '/principal';
+            } else {
+                return '/usuarios';
+            }
         }
         else{
             return redirect('/');

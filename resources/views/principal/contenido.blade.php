@@ -22,102 +22,105 @@
 
 <div class="main main-raised">
     <div class="container">
-        <div class="section text-center section-landing">
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    <h2 class="title">Let's talk product</h2>
-                    <h5 class="description">This is the paragraph where you can write more details about your product. Keep you user engaged by providing meaningful information. Remember that by this time, the user is curious, otherwise he wouldn't scroll to get here. Add a button if you want the user to see more.</h5>
-                </div>
-            </div>
+        
+            
+            @guest
+                <div class="section text-center section-landing">
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                            <h2 class="title">Let's talk product</h2>
+                            <h5 class="description">This is the paragraph where you can write more details about your product. Keep you user engaged by providing meaningful information. Remember that by this time, the user is curious, otherwise he wouldn't scroll to get here. Add a button if you want the user to see more.</h5>
+                        </div>
+                    </div>
 
-            <div class="features">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="info">
-                            <div class="icon icon-primary">
-                                <i class="material-icons">chat</i>
+                    <div class="features">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="info">
+                                    <div class="icon icon-primary">
+                                        <i class="material-icons">chat</i>
+                                    </div>
+                                    <h4 class="info-title">First Feature</h4>
+                                    <p>Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough.</p>
+                                </div>
                             </div>
-                            <h4 class="info-title">First Feature</h4>
-                            <p>Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough.</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="info">
-                            <div class="icon icon-success">
-                                <i class="material-icons">verified_user</i>
+                            <div class="col-md-4">
+                                <div class="info">
+                                    <div class="icon icon-success">
+                                        <i class="material-icons">verified_user</i>
+                                    </div>
+                                    <h4 class="info-title">Second Feature</h4>
+                                    <p>Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough.</p>
+                                </div>
                             </div>
-                            <h4 class="info-title">Second Feature</h4>
-                            <p>Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough.</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="info">
-                            <div class="icon icon-danger">
-                                <i class="material-icons">fingerprint</i>
+                            <div class="col-md-4">
+                                <div class="info">
+                                    <div class="icon icon-danger">
+                                        <i class="material-icons">fingerprint</i>
+                                    </div>
+                                    <h4 class="info-title">Third Feature</h4>
+                                    <p>Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough.</p>
+                                </div>
                             </div>
-                            <h4 class="info-title">Third Feature</h4>
-                            <p>Divide details about your product or agency work into parts. Write a few lines about each one. A paragraph describing a feature will be enough.</p>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            @else
+            <br><br>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1 col-sm-6 col-sm-offset-3">
+                        <div class="card card-signup">
+                            <form class="form" method="POST" action="{{ route('login') }}">
+                                {{ csrf_field() }}
+
+                                <div class="header header-primary text-center" style="height: 80px;">
+                                    <h4>INSCRIBIRSE</h4>
+                                </div>
+                                <p class="text-divider">SELECCIONA TUS EVENTOS</p>
+                                <div class="content">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">email</i>
+                                        </span>
+                                        <input id="email" type="email" placeholder="Email..." class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+                                    </div>
+
+                                </div>
+                                <div class="footer text-center">
+                                    <button type="submit" href="#pablo" class="btn btn-primary btn-lg">Ingresar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            @endguest
+            
 
         <div class="section text-center">
             <h2 class="title">NUESTROS EVENTOS 2018</h2>
 
             <div class="team">
                 <div class="row">
+                    @foreach($paquetes as $paquete)
                     <div class="col-md-4">
                         <div class="team-player">
-                            <img src="{{ asset('img/avatar.jpg') }}" alt="Thumbnail Image" class="img-raised img-circle">
-                            <h4 class="title">Gigi Hadid <br />
+                            <center>
+                            <h4 class="title"> Paquete: {{ $paquete->descripcion }} </h4><br>
+                            <img src="data:image/png;base64,{{ $paquete->img_evento }}" alt="Thumbnail Image" class="img-rounded img-responsive img-raised">
+                            </center>
                             <button class="btn btn-success btn-round">
                                 <i class="material-icons">add_circle</i> Ver Mas
                             </button>
-                            <button class="btn btn-primary btn-round" onclick="abrir_modal()">
-                                <i class="material-icons">person_add</i> PreInscripcion
-                            </button>
-                            </h4>
-                            <p class="description">You can write here details about one of your team members. You can give more details about what they do. Feel free to add some <a href="#">links</a> for people to be able to follow them outside the site.</p>
+                            <b><h4 style="color: red;">S/.{{ $paquete->precio }}</h4></b>
+                            <h4>Evento: {{ $paquete->nombre_evento }} - {{ $paquete->tipo_evento }}</h4>
+                            <p class="description">{{ $paquete->fecha_inicio }} / {{ $paquete->hora_inicio }} - {{ $paquete->fecha_fin }} / {{ $paquete->hora_fin }}</p>
                             <a href="#pablo" class="btn btn-simple btn-just-icon"><i class="fa fa-twitter"></i></a>
                             <a href="#pablo" class="btn btn-simple btn-just-icon"><i class="fa fa-instagram"></i></a>
                             <a href="#pablo" class="btn btn-simple btn-just-icon btn-default"><i class="fa fa-facebook-square"></i></a>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="team-player">
-                            <img src="{{ asset('img/christian.jpg') }}" alt="Thumbnail Image" class="img-raised img-circle">
-                            <h4 class="title">Christian Louboutin<br />
-                                <button class="btn btn-success btn-round">
-                                <i class="material-icons">add_circle</i> Ver Mas
-                                </button>
-                                <button class="btn btn-primary btn-round">
-                                    <i class="material-icons">person_add</i> PreInscripcion
-                                </button>
-                            </h4>
-                            <p class="description">You can write here details about one of your team members. You can give more details about what they do. Feel free to add some <a href="#">links</a> for people to be able to follow them outside the site.</p>
-                            <a href="#pablo" class="btn btn-simple btn-just-icon"><i class="fa fa-twitter"></i></a>
-                            <a href="#pablo" class="btn btn-simple btn-just-icon"><i class="fa fa-linkedin"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="team-player">
-                            <img src="{{ asset('img/kendall.jpg') }}" alt="Thumbnail Image" class="img-raised img-circle">
-                            <h4 class="title">Kendall Jenner<br />
-                                <button class="btn btn-success btn-round">
-                                <i class="material-icons">add_circle</i> Ver Mas
-                                </button>
-                                <button class="btn btn-primary btn-round">
-                                    <i class="material-icons">person_add</i> PreInscripcion
-                                </button>
-                            </h4>
-                            <p>You can write here details about one of your team members. You can give more details about what they do. Feel free to add some <a href="#">links</a> for people to be able to follow them outside the site.</p>
-                            <a href="#pablo" class="btn btn-simple btn-just-icon"><i class="fa fa-google-plus"></i></a>
-                            <a href="#pablo" class="btn btn-simple btn-just-icon"><i class="fa fa-youtube-play"></i></a>
-                            <a href="#pablo" class="btn btn-simple btn-just-icon btn-default"><i class="fa fa-twitter"></i></a>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
 

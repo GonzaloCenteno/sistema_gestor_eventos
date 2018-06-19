@@ -12,7 +12,7 @@
                         {{ csrf_field() }}
 
                         <div class="header header-primary text-center">
-                            <h4>Inicio de Sesion</h4>
+                            <h4>INICIO DE SESSION</h4>
                             <div class="social-line">
                                 <a href="#pablo" class="btn btn-simple btn-just-icon">
                                     <i class="fa fa-facebook-square"></i>
@@ -25,7 +25,7 @@
                                 </a>
                             </div>
                         </div>
-                        <p class="text-divider">Ingresar Datos</p>
+                        <p class="text-divider">INGRESAR CREDENCIALES</p>
                         <div class="content">
 
                             <div class="input-group">
@@ -42,29 +42,15 @@
                                 <input placeholder="Password..." id="password" type="password" class="form-control" name="password" required />
                             </div>
 
-                            <!-- If you want to add a checkbox to this form, uncomment this code-->
-
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                                    Recordar Sesion
-                                </label>
-                            </div> 
-
                         </div>
                         <div class="footer text-center">
-                            <button type="submit" href="#pablo" class="btn btn-simple btn-primary btn-lg">Ingresar</button>
-                            <a class="btn btn-link" href="{{ route('password.request') }}">
-                                Has Olvidado Tu Contraseña?
-                            </a>
+                            <button type="submit" href="#pablo" class="btn btn-primary btn-lg">Ingresar</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
-    @include('includes.footer')
 
 </div>
 @endsection
