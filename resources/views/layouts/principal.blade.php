@@ -21,6 +21,13 @@
     <link href="{{ asset('css/material-dashboard.css?v=1.2.0') }}" rel="stylesheet" />
     <!--  CSS for Demo Purpose, don't include it in your project     -->
     <link href="{{ asset('css/demo.css') }}" rel="stylesheet" />
+    
+    <link href="{{ asset('css/jquery-ui.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('css/ui.jqgrid.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('css/jquery-confirm.css') }}" rel="stylesheet">
+    
+    <link href="{{ asset('css/sweetalert2.css') }}" rel="stylesheet">
+
 
 </head>
 
@@ -88,15 +95,34 @@
     <div class="wrapper">
         @yield('content')
     </div>
-
+    
+    <div style="display:none;">
+    <audio id="audio_smallbox" controls>
+    <source type="audio/mp3" src="{{ asset('sound/smallbox.mp3') }}">
+    </audio>
+    <audio id="audio_messagebox" controls>
+    <source type="audio/mp3" src="{{ asset('sound/messagebox.mp3') }}">
+    </audio>
+    </div>
 
 </body>
-    <script src="{{ asset('js/jquery.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/jquery-3.2.1.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('archivos_js/preinscripciones/preinscripciones.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('archivos_js/principal/contenido.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/bootstrap.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/material.min.js') }}"></script>
     <script src="{{ asset('js/nouislider.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/material-kit.js') }}" type="text/javascript"></script>
+    
+    <script src="{{ asset('js/block_ui.js') }}"></script>
+    <script src="{{ asset('js/jquery-confirm.js')}}"></script>
+    <script src="{{ asset('js/grid.locale-en.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/jquery.jqGrid.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/i18n/grid.locale-es.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/jquery-ui.js') }}" type="text/javascript"></script>
+    
+    <script src="{{ asset('archivos_js/global_function.js') }}"></script>
+    <script src=" {{ asset('js/sweetalert2.js') }} " type="text/javascript"></script>
 
 </html>
 

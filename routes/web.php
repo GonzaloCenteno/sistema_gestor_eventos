@@ -18,6 +18,9 @@ Route::get('/', function () {
 
 Route::group(['namespace' => 'principal'], function() {
         Route::resource('principal', 'PrincipalController');
+        Route::get('autocompletar_eventos', 'PrincipalController@autocompletar_eventos');
+        Route::get('insertar_datos_recibo', 'PrincipalController@insertar_datos_recibo');
+        Route::get('insertar_datos_inscripcion', 'PrincipalController@insertar_datos_inscripcion');
 });
 
 $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');

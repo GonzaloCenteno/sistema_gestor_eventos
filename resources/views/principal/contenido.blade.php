@@ -70,27 +70,87 @@
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1 col-sm-6 col-sm-offset-3">
                         <div class="card card-signup">
-                            <form class="form" method="POST" action="{{ route('login') }}">
-                                {{ csrf_field() }}
-
                                 <div class="header header-primary text-center" style="height: 80px;">
-                                    <h4>INSCRIBIRSE</h4>
+                                    <h4>INSCRIPCION DE EVENTOS</h4>
                                 </div>
-                                <p class="text-divider">SELECCIONA TUS EVENTOS</p>
+                                <p class="text-divider">BUSCA Y SELECCIONA TUS EVENTOS</p>
                                 <div class="content">
 
                                     <div class="input-group">
                                         <span class="input-group-addon">
-                                            <i class="material-icons">email</i>
+                                            <i class="material-icons">search</i>
                                         </span>
-                                        <input id="email" type="email" placeholder="Email..." class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+                                        <input type="hidden" id="hiddenbuscar_evento" value="0">
+                                        <input id="buscar_evento" type="text" placeholder="ESCRIBIR NOMBRE DE EVENTO" class="form-control text-uppercase">
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="material-icons">attach_money</i>
+                                                </span>
+                                                <input type="text" placeholder="CANTIDAD" id="cantidad" class="form-control" onkeypress="return soloNumeroTab(event);">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="material-icons">attach_money</i>
+                                                </span>
+                                                <input type="text" placeholder="VALOR" id="valor" class="form-control" onkeypress="return soloNumeroTab(event);" disabled="">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <div class="input-group">
+                                                <button onclick="detalle_recibo_eventos();" class="btn btn-danger btn-lg">AGREGAR</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card card-signup">
+                                        <div class="header header-primary text-center" style="height: 80px; width: 300px">
+                                            <h4>LISTA DE EVENTOS</h4>
+                                        </div>
+                                        <div class="content">
+
+                                            <div style="border: 1px solid #DDD; margin-bottom: 6px;" id="tabla_detalle">
+                                                <table id="t_dina_det_recibo" class="table table-bordered table-sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="5%" align="center">Nº</th>
+                                                            <th width="75%">Nombre Evento</th>
+                                                            <th width="15%" align="right">Precio</th>
+                                                            <th width="5%" align="center">Eliminar</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+
+                                                <table class="table table-sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="5%" align="center"></th>
+                                                            <th width="75%" style="text-align: right">Total S/.</th>
+                                                            <th width="15%" style="border-top: 2px solid #017E42;">
+                                                                <label class='input'><input id="vw_em_rec_txt_detalle_total" type="text" value="000.000" class="input-xs text-align-right" disabled=""></label>
+                                                            </th>
+                                                            <th width="5%" align="center"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
                                     </div>
 
                                 </div>
                                 <div class="footer text-center">
-                                    <button type="submit" href="#pablo" class="btn btn-primary btn-lg">Ingresar</button>
+                                    <button onclick="grabar_datos()" class="btn btn-primary btn-lg">INSCRIBIRSE</button>
                                 </div>
-                            </form>
                         </div>
                     </div>
                 </div>
