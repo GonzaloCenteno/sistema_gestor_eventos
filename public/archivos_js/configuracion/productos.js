@@ -1,65 +1,61 @@
 
 $(document).ready(function () {
-    $("#li_config_auditorios").addClass('active');
+    $("#li_config_productos").addClass('active');
     $("#menu_configuracion").addClass('open');
     $("#menu_configuracion").css({ 'background-color' : '#9930B0', 'border-radius' : '20px' });
 
-    jQuery("#table_Auditorios").jqGrid({
-        url: 'getAuditorios',
+    jQuery("#table_Productos").jqGrid({
+        url: 'getProductos',
         datatype: 'json', mtype: 'GET',
         height: 'auto', autowidth: true,
         toolbarfilter: true,
-        colNames: ['ID','Nombre','capacidad','Disponibilidad','Ubicación' ],
-        rowNum: 10, sortname: 'id_auditorio', sortorder: 'desc', viewrecords: true, caption: 'LISTA DE AUDITORIOS REGISTRADOS', align: "center",
+        colNames: ['ID', 'Nombre Producto', 'Precio'],
+        rowNum: 10, sortname: 'id_producto', sortorder: 'desc', viewrecords: true, caption: 'LISTA DE PRODUCTOS REGISTRADOS', align: "center",
         colModel: [
-            {name: 'id_auditorio', index: 'id_auditorio', hidden: true},
-             {name: 'nombre_auditorio', index: 'nombre_auditorio', align: 'center', width: 20},
-            {name: 'capacidad', index: 'capacidad', align: 'center', width: 20},
-            {name: 'disponibilidad', index: 'disponibilidad', align: 'center', width: 20},
-            {name: 'ubicacion', index: 'ubicacion', align: 'center', width: 20}
+            {name: 'id_producto', index: 'id_producto', hidden: true},
+            {name: 'desc_producto', index: 'desc_producto', align: 'center', width: 80},
+            {name: 'precio', index: 'precio', align: 'center', width: 70}
         ],
-        pager: '#pager_table_Auditorios',
+        pager: '#pager_table_Productos',
         rowList: [5, 10, 15, 20],
         gridComplete: function () {
-                    var idarray = jQuery('#table_Auditorios').jqGrid('getDataIDs');
+                    var idarray = jQuery('#table_Productos').jqGrid('getDataIDs');
                     if (idarray.length > 0) {
-                    var firstid = jQuery('#table_Auditorios').jqGrid('getDataIDs')[0];
-                            $("#table_Auditorios").setSelection(firstid);    
+                    var firstid = jQuery('#table_Productos').jqGrid('getDataIDs')[0];
+                            $("#table_Productos").setSelection(firstid);    
                         }
         },
         onSelectRow: function (Id) {},
         ondblClickRow: function (Id) {
-            modificar_auditorio();
+            modificar_producto();
         }
     });
 
-    $("#vw_buscar_auditorios").keypress(function (e) {
+    $("#vw_buscar_materiales").keypress(function (e) {
             if (e.which == 13) {
-                buscar_auditorios();
+                buscar_materiales();
             }
     });
 
 });
 
 function limpiar_formulario() {
-    $("#dlg_capacidad").val('');
-    $("#dlg_ubicacion").val('');
+    $("#dlg_desc_producto").val('');
+    $("#dlg_precio").val('');
 }
 
 
-//MANTENIMIENTO DE AUDITORIOS
-
-function nuevo_auditorio() {
-    $("#dialog_nuevo_auditorio").dialog({
+function nuevo_producto() {
+    $("#dialog_nuevo_producto").dialog({
         autoOpen: false, modal: true, width: 550, 
         show:{ effect: "explode", duration: 400},
         hide:{ effect: "explode", duration: 400}, resizable: false,
-        title: ".: CREAR NUEVO AUDITORIO :.",
+        title: ".: CREAR NUEVO PRODUCTO :.",
         buttons: [{
                 html: "<i class='fa fa-save'></i>&nbsp; Guardar",
                 "class": "btn btn-success",
                 click: function () {
-                    guardar_editar_auditorio(1);
+                    guardar_editar_producto(1);
                 }
             }, {
                 html: "<i class='fa fa-sign-out'></i>&nbsp; Salir",
@@ -77,80 +73,74 @@ function nuevo_auditorio() {
     }).dialog('open');
 }
 
-function guardar_editar_auditorio(tipo) {
+function guardar_editar_producto(tipo) {
 
-    capacidad = $("#dlg_capacidad").val();
-    disponibilidad = $("#dlg_disp").val();
-    ubicacion = $("#dlg_ubicacion").val();
-    nombre = $("#dlg_nombre").val();
-
-    if(capacidad == "")
+    desc_producto = $("#dlg_desc_producto").val();
+    precio = $("#dlg_precio").val();
+   
+    
+    if(desc_producto == "")
     {
-        mostraralertasconfoco("* El Campo Capacidad es Obligatorio","#dlg_capacidad");
+        mostraralertasconfoco("* El Campo Nombre producto es Obligatorio","#dlg_desc_producto");
         return false;
     }
 
-    if(ubicacion == "")
+    if(precio == "")
     {
-        mostraralertasconfoco("* El Campo Ubicacion es Obligatorio","#dlg_ubicacion");
+        mostraralertasconfoco("* El Campo precio es Obligatorio","#dlg_precio");
         return false;
     }
-      if(nombre == "")
-    {
-        mostraralertasconfoco("* El Campo nombre es Obligatorio","#dlg_nombre");
-        return false;
-    }
-
 
     if (tipo == 1) {
-        MensajeDialogLoadAjax('table_Auditorios', '.:: Cargando ...');
+        MensajeDialogLoadAjax('table_Productos', '.:: Cargando ...');
         $.ajax({
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            url: 'auditorios/create',
+            url: 'productos/create',
             type: 'GET',
             data: {
-                nombre:nombre,
-                disponibilidad:disponibilidad,
-                capacidad:capacidad,
-                ubicacion:ubicacion,
-               
+                desc_producto:desc_producto,
+                precio:precio,
             },
             success: function(r) 
             {
                 MensajeExito("Se Guardo Correctamente","Su Registro Fue Insertado Correctamente...","top","right","success");
-                MensajeDialogLoadAjaxFinish('table_Auditorios');
-                fn_actualizar_grilla('table_Auditorios');
-                $("#dialog_nuevo_auditorio").dialog("close");
+                MensajeDialogLoadAjaxFinish('table_Productos');
+                fn_actualizar_grilla('table_Productos');
+                $("#dialog_nuevo_producto").dialog("close");
             },
             error: function(data) {
                 mostraralertas("hubo un error, Comunicar al Administrador");
-                MensajeDialogLoadAjaxFinish('table_Auditorios');
+                MensajeDialogLoadAjaxFinish('table_Productos');
                 console.log('error');
                 console.log(data);
             }
         });
     }
     else if (tipo == 2) {
-        id_auditorio = $("#dlg_id_auditorio").val();
-        MensajeDialogLoadAjax('table_Auditorios', '.:: Cargando ...');
+
+        id_producto = $("#dlg_id_producto").val();
+        desc_producto = $("#dlg_desc_producto").val();
+        precio = $("#dlg_precio").val();
+
+        MensajeDialogLoadAjax('table_Productos', '.:: Cargando ...');
         $.ajax({
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            url: 'auditorios/'+id_auditorio+'/edit',
+            url: 'productos/'+id_producto+'/edit',
             type: 'GET',
             data: {
-                capacidad:capacidad,
-                ubicacion:ubicacion
+                 desc_producto:desc_producto,
+                precio:precio
             },
             success: function(r) 
             {
                 MensajeExito("Se Modifico Correctamente","Su Registro Fue Modificado Correctamente...","top","right","success");
-                MensajeDialogLoadAjaxFinish('table_Auditorios');
-                fn_actualizar_grilla('table_Auditorios');
-                $("#dialog_nuevo_auditorio").dialog("close");
+                MensajeDialogLoadAjaxFinish('table_Productos');
+                fn_actualizar_grilla('table_Productos');
+                $("#dialog_nuevo_producto").dialog("close");
             },
             error: function(data) {
                 mostraralertas("hubo un error, Comunicar al Administrador");
-                MensajeDialogLoadAjaxFinish('table_Auditorios');
+                MensajeDialogLoadAjaxFinish('table_Productos');
                 console.log('error');
                 console.log(data);
             }
@@ -159,20 +149,20 @@ function guardar_editar_auditorio(tipo) {
  
 }
 
-function modificar_auditorio()
+function modificar_producto()
 {
-    id_auditorio = $('#table_Auditorios').jqGrid ('getGridParam', 'selrow');
+    id_producto = $('#table_Productos').jqGrid ('getGridParam', 'selrow');
 
-    if (id_auditorio) {
+    if (id_producto) {
 
-        $("#dialog_nuevo_auditorio").dialog({
+        $("#dialog_nuevo_producto").dialog({
             autoOpen: false, modal: true, width: 600, show: {effect: "fade", duration: 300}, resizable: false,
-            title: ".: EDITAR AUDITORIO :.",
+            title: ".: EDITAR PRODUCTO :.",
             buttons: [{
                 html: "<i class='fa fa-save'></i>&nbsp; Guardar",
                 "class": "btn btn-success bg-color-green",
                 click: function () {
-                    guardar_editar_auditorio(2);
+                    guardar_editar_producto(2);
                 }
             }, {
                 html: "<i class='fa fa-sign-out'></i>&nbsp; Salir",
@@ -182,44 +172,46 @@ function modificar_auditorio()
                 }
             }],
         });
-        $("#dialog_nuevo_auditorio").dialog('open');
+        $("#dialog_nuevo_producto").dialog('open');
 
+        MensajeDialogLoadAjax('dialog_nuevo_producto', '.:: Cargando ...');
 
-        MensajeDialogLoadAjax('dialog_nuevo_auditorio', '.:: Cargando ...');
-
-        $.ajax({url: 'auditorios/'+id_auditorio,
+        $.ajax({url: 'productos/'+id_producto,
             type: 'GET',
             success: function(datos)
             {
-                $("#dlg_id_auditorio").val(datos[0].id_auditorio);
-                $("#dlg_capacidad").val(datos[0].capacidad);
-                $("#dlg_ubicacion").val(datos[0].ubicacion);
-                MensajeDialogLoadAjaxFinish('dialog_nuevo_auditorio');
+                $("#dlg_id_producto").val(datos[0].id_producto);
+                $("#dlg_desc_producto").val(datos[0].desc_producto);
+                $("#dlg_precio").val(datos[0].precio);
+                MensajeDialogLoadAjaxFinish('dialog_nuevo_producto');
 
             },
             error: function(data) {
                 mostraralertas("Hubo un Error, Comunicar al Administrador");
                 console.log('error');
                 console.log(data);
-                MensajeDialogLoadAjaxFinish('dialog_nuevo_auditorio');
+                MensajeDialogLoadAjaxFinish('dialog_nuevo_producto');
             }
         });
     }else{
-        mostraralertasconfoco("No Hay Registros Seleccionados","#table_Auditorios");
+        mostraralertasconfoco("No Hay Registros Seleccionados","#table_Productos");
     }
 }
 
-function eliminar_auditorio(){
-    id_auditorio = $('#table_Auditorios').jqGrid('getGridParam', 'selrow');
 
-    if(id_auditorio == null)
+function eliminar_producto(){
+    id_producto = $('#table_Productos').jqGrid ('getGridParam', 'selrow');
+    
+    if(id_producto == null)
     {
-        mostraralertasconfoco("No hay Registros seleccionados","#table_Auditorios");
+        mostraralertasconfoco("No hay Registros seleccionados","#table_Productos");
         return false;
     }
-
+    
+    desc_producto = $('#table_Productos').jqGrid ('getCell', id_producto, 'desc_producto');
+    
     swal({
-          title: '¿Está Seguro que desea Eliminar El Auditorio?',
+          title: '¿Está Seguro que desea Eliminar El producto ' + desc_producto + ' ?',
           text: "Los Cambios no se podran revertir!",
           type: 'warning',
           showCancelButton: true,
@@ -232,7 +224,7 @@ function eliminar_auditorio(){
           buttonsStyling: false,
           reverseButtons: true
         }).then(function(result) {
-              fn_elimiar_auditorio();
+              fn_elimiar_producto();
             }, function(dismiss) {
               MensajeExito("Mensaje del Sistema","Operacion Cancelada","top","right","danger");
             });
@@ -240,23 +232,23 @@ function eliminar_auditorio(){
         audio_1.play();
 }
 
-function fn_elimiar_auditorio() {
-    id_auditorio = $('#table_Auditorios').jqGrid('getGridParam', 'selrow');
+function fn_elimiar_producto() {
+    id_producto = $('#table_Productos').jqGrid ('getGridParam', 'selrow');
 
     $.ajax({
-        url: 'auditorios/destroy',
+        url: 'productos/destroy',
         type: 'POST',
-        data: {_method: 'delete',_token:$("#btn_vw_usuarios_Eliminar").data('token'),id_auditorio: id_auditorio},
+        data: {_method: 'delete',_token:$("#btn_vw_productos_eliminar").data('token'),id_producto: id_producto},
         success: function (data) {
             MensajeAlerta("Se Eliminó Correctamente","Su Registro Fue eliminado Correctamente...","top","right","success");
-            fn_actualizar_grilla('table_Auditorios');
+            fn_actualizar_grilla('table_Productos');
         }, error: function (data) {
             MensajeAlerta('* Error.', 'Contactese con el Administrador.');
         }
     });
 }
 
-function buscar_auditorios(){
-    auditorios = $("#vw_buscar_auditorios").val();
-    fn_actualizar_grilla('table_Auditorios','getAuditorios?auditorios='+auditorios);
+function buscar_materiales(){
+    materiales = $("#vw_buscar_materiales").val();
+    fn_actualizar_grilla('table_Materiales','getMateriales?materiales='+materiales);
 }
