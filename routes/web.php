@@ -15,7 +15,6 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-
 Route::group(['namespace' => 'principal'], function() {
         Route::resource('principal', 'PrincipalController');
         Route::get('autocompletar_eventos', 'PrincipalController@autocompletar_eventos');
@@ -81,9 +80,43 @@ Route::group(['namespace' => 'recibos'], function() {
 Route::group(['namespace' => 'caja'], function() {
         Route::resource('caja', 'CajaController');
         Route::get('getRecibosEmititos', 'CajaController@getRecibosEmititos');
+        Route::get('imprimir_recibo','CajaController@imprimir_recibo');
+        Route::get('imprimir_reporte_caja','CajaController@imprimir_reporte_caja');
+        
+        Route::resource('emision_recibos', 'EmisionRecibosController');
+        Route::get('getRecibosProductos', 'EmisionRecibosController@getRecibosProductos');
+        Route::get('autocompletar_productos', 'EmisionRecibosController@autocompletar_productos');
 });
-Route::group(['namespace' => 'actividad'], function() {
+
+Route::group(['namespace' => 'configuracion'], function() {
+        Route::resource('productos', 'ProductosController');
+        Route::get('getProductos', 'ProductosController@getProductos');
+
+        Route::resource('turno', 'TurnosController');
+        Route::get('getTurnos', 'TurnosController@getTurnos');
+        Route::get('autocompletar_auditorios', 'TurnosController@autocompletar_auditorios');
+        
         Route::resource('actividad', 'ActividadController');
-        Route::get('getActividad', 'MaterialesController@getMateriales');
-        //Route::get('autocompletar_nombre_persona', 'MaterialesController@autocompletar_nombre_persona');
+        Route::get('getActividad', 'ActividadController@getActividad');
+        Route::get('autocompletar_turnos', 'ActividadController@autocompletar_turnos');
+        Route::get('autocompletar_ponentes', 'ActividadController@autocompletar_ponentes');
+});
+
+Route::group(['namespace' => 'inventario'], function() {
+        Route::resource('inventario', 'InventarioController');
+
+});
+
+Route::group(['namespace' => 'control'], function() {
+        Route::resource('credenciales', 'CredencialesController');
+        Route::get('getCredenciales', 'CredencialesController@getCredenciales');
+        Route::get('ver_credenciales/{id_usuario}', 'CredencialesController@ver_credenciales');
+        
+        Route::resource('asistencia', 'AsistenciaController');
+        Route::get('getAsistencia_persona', 'AsistenciaController@getAsistencia_persona');
+        Route::get('recuperar_asistencias', 'AsistenciaController@recuperar_asistencias');
+        Route::get('buscar_nro_recibo', 'AsistenciaController@buscar_nro_recibo');
+        Route::get('buscar_eventos_by_usuarios', 'AsistenciaController@buscar_eventos_by_usuarios');
+        Route::get('autocompletar_materiales', 'AsistenciaController@autocompletar_materiales');
+        Route::get('agregar_materiales_asistencia/{id_asistencia}', 'AsistenciaController@agregar_materiales_asistencia');
 });

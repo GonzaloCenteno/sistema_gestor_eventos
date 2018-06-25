@@ -92,7 +92,7 @@ function btn_borrar_detalle(num) {
 
 
 function grabar_datos(){
-    monto = parseFloat($("#valor").val());
+    monto = parseFloat($("#vw_em_rec_txt_detalle_total").val());
     cantidad = parseFloat($("#cantidad").val());
     evento = $("#buscar_evento").val();
     id_evento = $("#hiddenbuscar_evento").val();

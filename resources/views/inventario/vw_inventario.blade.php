@@ -6,7 +6,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header" data-background-color="purple">
-                    <h4 class="title">MANTENIMIENTO DE PRODUCTOS</h4>
+                    <h4 class="title">MANTENIMIENTO DE INVENTARIO</h4>
                 </div>
                 <div class="card-content">
                 <div class="col-xs-6">
@@ -24,45 +24,40 @@
 
                     @if( $permisos[0]->btn_new ==1 )
                         <button onclick="nuevo_producto();" type="button" class="btn btn-success btn-round">
-                            <span class="btn-label"><i class="material-icons">add</i></span>Nuevo
+                            <span class="btn-label"><i class="material-icons">add</i></span>Agregar a Inventario
                         </button>
                     @else
                         <button onclick="sin_permiso();" type="button" class="btn btn-success btn-round">
-                            <span class="btn-label"><i class="material-icons">add</i></span>Nuevo
+                            <span class="btn-label"><i class="material-icons">add</i></span>Agregar a Inventario
                         </button>
                     @endif
-                    @if( $permisos[0]->btn_edit ==1 )
-                        <button onclick="modificar_producto();" type="button" class="btn btn-warning btn-round">
-                            <span class="btn-label"><i class="material-icons">create</i></span> Modificar
-                        </button>
-                    @else
-                        <button onclick="sin_permiso();" type="button" class="btn btn-warning btn-round">
-                            <span class="btn-label"><i class="material-icons">create</i></span> Modificar
-                        </button>
-                    @endif
-                    @if( $permisos[0]->btn_del ==1 )
-                        <button onclick="eliminar_producto();" data-token="{{ csrf_token() }}" type="button" class="btn btn-danger btn-round" id="btn_vw_productos_eliminar">
-                            <span class="btn-label"><i class="material-icons">delete</i></span> Eliminar
-                        </button>
-                    @else
-                        <button onclick="sin_permiso();" data-token="{{ csrf_token() }}" type="button" class="btn btn-danger btn-round">
-                        <span class="btn-label"><i class="material-icons">delete</i></span> Eliminar
-                        </button>
-                    @endif
+                   
                 </div> 
                     
                 </div>
-                <article class="col-xs-12">
-                        <table id="table_Productos"></table>
-                        <div id="pager_table_Productos" style="color:black;"></div>
+                
+                <div class="row">
+                    <div class="col-sm-6">
+                        <table id="table_Inventario"></table>
+                        <div id="pager_table_Inventario" style="color:black;"></div>
                         <br>
-                </article>
+                    </div>
+                    
+                    <div class="col-sm-6">
+                        <table id="table_Entrada"></table>
+                        <div id="pager_table_Entrada" style="color:black;"></div>
+                        <br>
+                        <table id="table_Salida"></table>
+                        <div id="pager_table_Salida" style="color:black;"></div>
+                    </div>
+                </div>
+               
             </div>
         </div>
     </div>
 </div>
 
-<script src="{{ asset('archivos_js/configuracion/productos.js') }}"></script>
+<script src="{{ asset('archivos_js/inventario/inventario.js') }}"></script>
 
 <!-- MANTENIMIENTO DE PRODUCTO -->
 

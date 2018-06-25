@@ -86,26 +86,7 @@
                     
                 </ul>
             </div>
-            <footer class="footer navbar-fixed-bottom">
-                <div class="container-fluid">
-                    <nav class="pull-right">
-                        <ul>
-                            <li>
-                                <a href="#">
-                                    Realizado por : Andrea Ccorimanya Quintana
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <p class="copyright pull-right">
-                        &copy;
-                        <script>
-                            document.write(new Date().getFullYear())
-                        </script>
-                        <a href="http://www.ucsm.edu.pe/">Universidad Catolica de Santa Maria</a>, Sistema Gestor de Eventos
-                    </p>
-                </div>
-            </footer>
+           
         </div>
         <div class="main-panel">
             <nav class="navbar navbar-transparent navbar-absolute">

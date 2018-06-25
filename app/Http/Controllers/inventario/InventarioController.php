@@ -1,25 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\configuracion;
+namespace App\Http\Controllers\inventario;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Models\configuracion\Productos;
 
-
-class ProductosController extends Controller
+class InventarioController extends Controller
 {
     public function index()
     {
-        $permisos = DB::select("SELECT * from permisos.vw_permisos where id_sistema='li_config_productos' and id_usu=".Auth::user()->id);
+        $permisos = DB::select("SELECT * from permisos.vw_permisos where id_sistema='li_config_inventario' and id_usu=".Auth::user()->id);
         $menu = DB::select('SELECT * from permisos.vw_permisos where id_usu='.Auth::user()->id);
         if(count($permisos)==0)
         {
             return view('errors/sin_permiso',compact('menu','permisos'));
         }
-        return view('configuracion/vw_productos',compact('menu','permisos'));
+        return view('inventario/vw_inventario',compact('menu','permisos'));
     }
 
     public function getProductos(Request $request)

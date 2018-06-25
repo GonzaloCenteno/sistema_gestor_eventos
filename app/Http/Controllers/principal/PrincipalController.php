@@ -28,7 +28,7 @@ class PrincipalController extends Controller
                 'msg' => 'si',
             ]);
         }else{
-            $usuario->name     = $request['nombre']." ".$request['apaterno']." ".$request['amaterno'];
+            $usuario->name     = strtoupper($request['nombre'])." ".strtoupper($request['apaterno'])." ".strtoupper($request['amaterno']);
             $usuario->email    = $request['email'];
             $usuario->password = bcrypt($request['password']);
             $usuario->tipo_persona = $request['tipo_persona'];
@@ -62,6 +62,7 @@ class PrincipalController extends Controller
         $Recibo->concepto = "PAGO POR CONCEPTO DE EVENTOS";
         $Recibo->monto_total = $request['monto'];
         $Recibo->fecha_registro = date('d-m-Y');
+        $Recibo->id_usuario = Auth::user()->id;
         $Recibo->save();
         return $Recibo->id_recibo;
     }

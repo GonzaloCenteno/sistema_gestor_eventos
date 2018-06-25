@@ -1,28 +1,82 @@
 
 $(document).ready(function () {
-    $("#li_config_productos").addClass('active');
-    $("#menu_configuracion").addClass('open');
-    $("#menu_configuracion").css({ 'background-color' : '#9930B0', 'border-radius' : '20px' });
+    $("#li_config_inventario").addClass('active');
+    $("#menu_inventario").addClass('open');
+    $("#menu_inventario").css({ 'background-color' : '#9930B0', 'border-radius' : '20px' });
 
-    jQuery("#table_Productos").jqGrid({
-        url: 'getProductos',
+    jQuery("#table_Inventario").jqGrid({
+        url: '',
         datatype: 'json', mtype: 'GET',
         height: 'auto', autowidth: true,
         toolbarfilter: true,
         colNames: ['ID', 'Nombre Producto', 'Precio'],
-        rowNum: 10, sortname: 'id_producto', sortorder: 'desc', viewrecords: true, caption: 'LISTA DE PRODUCTOS REGISTRADOS', align: "center",
+        rowNum: 10, sortname: 'id_producto', sortorder: 'desc', viewrecords: true, caption: 'LISTA DE PRODUCTOS EN INVENTARIO', align: "center",
         colModel: [
             {name: 'id_producto', index: 'id_producto', hidden: true},
             {name: 'desc_producto', index: 'desc_producto', align: 'center', width: 80},
             {name: 'precio', index: 'precio', align: 'center', width: 70}
         ],
-        pager: '#pager_table_Productos',
+        pager: '#pager_table_Inventario',
         rowList: [5, 10, 15, 20],
         gridComplete: function () {
-                    var idarray = jQuery('#table_Productos').jqGrid('getDataIDs');
+                    var idarray = jQuery('#table_Inventario').jqGrid('getDataIDs');
                     if (idarray.length > 0) {
-                    var firstid = jQuery('#table_Productos').jqGrid('getDataIDs')[0];
-                            $("#table_Productos").setSelection(firstid);    
+                    var firstid = jQuery('#table_Inventario').jqGrid('getDataIDs')[0];
+                            $("#table_Inventario").setSelection(firstid);    
+                        }
+        },
+        onSelectRow: function (Id) {},
+        ondblClickRow: function (Id) {
+            modificar_producto();
+        }
+    });
+    
+    jQuery("#table_Entrada").jqGrid({
+        url: '',
+        datatype: 'json', mtype: 'GET',
+        height: 'auto', autowidth: true,
+        toolbarfilter: true,
+        colNames: ['ID', 'Nombre Producto', 'Precio'],
+        rowNum: 10, sortname: 'id_producto', sortorder: 'desc', viewrecords: true, caption: 'LISTA DE ENTRADAS', align: "center",
+        colModel: [
+            {name: 'id_producto', index: 'id_producto', hidden: true},
+            {name: 'desc_producto', index: 'desc_producto', align: 'center', width: 80},
+            {name: 'precio', index: 'precio', align: 'center', width: 70}
+        ],
+        pager: '#pager_table_Entrada',
+        rowList: [5, 10, 15, 20],
+        gridComplete: function () {
+                    var idarray = jQuery('#table_Entrada').jqGrid('getDataIDs');
+                    if (idarray.length > 0) {
+                    var firstid = jQuery('#table_Entrada').jqGrid('getDataIDs')[0];
+                            $("#table_Entrada").setSelection(firstid);    
+                        }
+        },
+        onSelectRow: function (Id) {},
+        ondblClickRow: function (Id) {
+            modificar_producto();
+        }
+    });
+    
+    jQuery("#table_Salida").jqGrid({
+        url: '',
+        datatype: 'json', mtype: 'GET',
+        height: 'auto', autowidth: true,
+        toolbarfilter: true,
+        colNames: ['ID', 'Nombre Producto', 'Precio'],
+        rowNum: 10, sortname: 'id_producto', sortorder: 'desc', viewrecords: true, caption: 'LISTA DE SALIDAS', align: "center",
+        colModel: [
+            {name: 'id_producto', index: 'id_producto', hidden: true},
+            {name: 'desc_producto', index: 'desc_producto', align: 'center', width: 80},
+            {name: 'precio', index: 'precio', align: 'center', width: 70}
+        ],
+        pager: '#pager_table_Salida',
+        rowList: [5, 10, 15, 20],
+        gridComplete: function () {
+                    var idarray = jQuery('#table_Salida').jqGrid('getDataIDs');
+                    if (idarray.length > 0) {
+                    var firstid = jQuery('#table_Salida').jqGrid('getDataIDs')[0];
+                            $("#table_Salida").setSelection(firstid);    
                         }
         },
         onSelectRow: function (Id) {},

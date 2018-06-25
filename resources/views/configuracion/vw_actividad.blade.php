@@ -6,16 +6,16 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header" data-background-color="purple">
-                    <h4 class="title">MANTENIMIENTO DE AUDITORIOS</h4>
+                    <h4 class="title">MANTENIMIENTO DE ACTIVIDADES</h4>
                 </div>
                 <div class="card-content">
                 <div class="col-xs-6">
                         <div class="input-group">
                             <div class="icon-addon addon-md">
-                                <input id="vw_buscar_materiales" type="text" class="form-control" placeholder="Buscar por Nombre de Material">
+                                <input id="vw_buscar_actividad" type="text" class="form-control text-uppercase" placeholder="BUSCAR POR NOMBRE DE ACTIVIDAD">
                             </div>
                             <span class="input-group-btn">
-                                <button onclick="buscar_materiales();" type="button" class="btn btn-default btn-round"><i class="material-icons">search</i> Buscar</button>
+                                <button onclick="buscar_actividades();" type="button" class="btn btn-default btn-round"><i class="material-icons">search</i> Buscar</button>
                             </span>
                         </div>
                 </div>
@@ -23,7 +23,7 @@
                 <div class="col-xs-6">  
 
                     @if( $permisos[0]->btn_new ==1 )
-                        <button onclick="nuevo_material();" type="button" class="btn btn-success btn-round">
+                        <button onclick="nueva_actividad();" type="button" class="btn btn-success btn-round">
                             <span class="btn-label"><i class="material-icons">add</i></span>Nuevo
                         </button>
                     @else
@@ -32,7 +32,7 @@
                         </button>
                     @endif
                     @if( $permisos[0]->btn_edit ==1 )
-                        <button onclick="modificar_material();" type="button" class="btn btn-warning btn-round">
+                        <button onclick="modificar_actividad();" type="button" class="btn btn-warning btn-round">
                             <span class="btn-label"><i class="material-icons">create</i></span> Modificar
                         </button>
                     @else
@@ -41,7 +41,7 @@
                         </button>
                     @endif
                     @if( $permisos[0]->btn_del ==1 )
-                        <button onclick="eliminar_material();" data-token="{{ csrf_token() }}" type="button" class="btn btn-danger btn-round" id="btn_vw_materiales_eliminar">
+                        <button onclick="eliminar_actividad();" data-token="{{ csrf_token() }}" type="button" class="btn btn-danger btn-round" id="btn_vw_actividad_eliminar">
                             <span class="btn-label"><i class="material-icons">delete</i></span> Eliminar
                         </button>
                     @else
@@ -62,47 +62,49 @@
     </div>
 </div>
 
-<script src="{{ asset('archivos_js/materiales/materiales.js') }}"></script>
+<script src="{{ asset('archivos_js/configuracion/actividad.js') }}"></script>
 
 <!-- MANTENIMIENTO DE USUARIOS -->
 
-<div id="dialog_nuevo_material" style="display: none">
+<div id="dialog_nueva_actividad" style="display: none">
     <div class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header" data-background-color="purple">
-                            <h4 class="title">INFORMACION MATERIAL</h4>
+                            <h4 class="title">INFORMACION DEL TURNO</h4>
                         </div>
                         <div class="card-content">
 
-                            <input type="hidden" id="dlg_id_material">
+                            <input type="hidden" id="dlg_id_actividad">
                             
                             <div class="col-sm-12">
                                 <div class="input-group">
                                     <span class="input-group-addon">
-                                        <i class="material-icons">settings</i>
+                                        <i class="material-icons">toc</i>
                                     </span>
-                                    <input type="text" id="dlg_nombre_material" maxlength="10" class="form-control" placeholder="NOMBRE MATERIAL">
+                                    <input type="text" id="dlg_nombre_actividad" maxlength="100" class="form-control text-uppercase" placeholder="NOMBRE ACTIVIDAD">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="material-icons">vertical_split</i>
+                                    </span>
+                                    <input type="hidden" id="hiddendlg_turno">
+                                    <input type="text" id="dlg_turno" class="form-control text-uppercase" placeholder="ESCRIBIR DESCRIPCION DEL TURNO">
                                 </div>
                             </div>
                             
                             <div class="col-sm-12">
                                 <div class="input-group">
                                     <span class="input-group-addon">
-                                        <i class="material-icons">settings</i>
+                                        <i class="material-icons">turned_in</i>
                                     </span>
-                                    <input type="text" id="dlg_tipo_material" maxlength="10" class="form-control" placeholder="TIPO MATERIAL">
-                                </div>
-                            </div>
-                            
-                            <div class="col-sm-12">
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <i class="material-icons">settings</i>
-                                    </span>
-                                    <input type="text" id="dlg_stock" class="form-control" placeholder="STOCK DEL MATERIAL" onkeypress="return soloNumeroTab(event);">
+                                    <input type="hidden" id="hiddendlg_ponente">
+                                    <input type="text" id="dlg_ponente" class="form-control text-uppercase" placeholder="ESCRIBIR NOMBRE DEL PONENTE">
                                 </div>
                             </div>
 

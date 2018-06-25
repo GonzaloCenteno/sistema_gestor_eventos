@@ -16,7 +16,7 @@
                         </span>
                         <div class="form-group">
                             <label for="exampleFormControlSelect1">SELECCIONAR TIPO RECIBO</label>
-                            <select class="form-control" id="mdl_cargo">
+                            <select class="form-control" id="tipo_recibo" onchange="cambiar_tipo();">
                                     <option value='0'>GENERADOS</option>
                                     <option value='1'>PAGADOS</option>
                                     <option value='2'>ANULADOS</option>
@@ -31,7 +31,7 @@
                         <span class="input-group-addon">
                             <i class="material-icons">today</i>
                         </span>
-                        <input id="fecha_desde" onchange="seleccionar_fecha();" type="date" class="form-control text-center" value="<?php echo date("Y-m-01"); ?>">
+                        <input id="fecha_inicio" onchange="cambiar_tipo();" type="date" class="form-control text-center" value="<?php echo date("Y-m-01"); ?>">
                     </div>
                 </div>
 
@@ -41,7 +41,7 @@
                         <span class="input-group-addon">
                             <i class="material-icons">today</i>
                         </span>
-                        <input id="fecha_hasta" onchange="seleccionar_fecha();" type="date" class="form-control text-center" value="<?php echo date("Y-m-d"); ?>">
+                        <input id="fecha_fin" onchange="cambiar_tipo();" type="date" class="form-control text-center" value="<?php echo date("Y-m-d"); ?>">
                     </div>
                 </div> 
 
@@ -52,8 +52,8 @@
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">IMPRIMIR REPORTE</a></li>
-                            <li><a href="#">REIMPRIMIR RECIBO</a></li>
+                            <li><button onclick="reporte_caja();" class="btn btn-danger">IMPRIMIR REPORTE</button></li>
+                            <li><button onclick="reimprimir_recibo();" class="btn btn-prymary">REIMPRIMIR RECIBO</button></li>
                         </ul>
                     </div>
                 </div>
@@ -71,35 +71,82 @@
 
 <script src="{{ asset('archivos_js/caja/caja.js') }}"></script>
 
-<!-- MANTENIMIENTO DE USUARIOS -->
+<div id="vw_caja_mov_confirm_pago_reporte" style="display: none">
+    <div class="widget-body">
+        <div  class="smart-form">
+            <div class="panel-group">
+                <iframe id="print_recibo_pagado" width="820" height="490" frameborder="0" allowfullscreen></iframe> 
+            </div>
+        </div>
+    </div>
+</div>
 
-<div id="dialog_nuevo_auditorio" style="display: none">
+<div id="dialog_nuevo_pago_caja" style="display: none">
     <div class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header" data-background-color="purple">
-                            <h4 class="title">INFORMACION AUDITORIO</h4>
+                            <h4 class="title">INFORMACION RECIBO</h4>
                         </div>
                         <div class="card-content">
                             <input type="hidden" id="dlg_id_auditorio">
-                            <div class="col-sm-12">
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <i class="material-icons">settings</i>
-                                    </span>
-                                    <input type="text" id="dlg_capacidad" class="form-control" placeholder="CAPACIDAD DEL AUDITORIO">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">assignment</i>
+                                        </span>
+                                        <input type="text" id="dlg_recibo" class="form-control" placeholder="RECIBO" disabled="">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">person</i>
+                                        </span>
+                                        <input type="text" id="dlg_persona" class="form-control" placeholder="PERSONA" disabled="">
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="col-sm-12">
                                 <div class="input-group">
                                     <span class="input-group-addon">
-                                        <i class="material-icons">settings</i>
+                                        <i class="material-icons">menu</i>
                                     </span>
-                                    <input type="text" id="dlg_ubicacion" class="form-control" placeholder="UBICACION DEL AUDITORIO">
+                                    <input type="text" id="dlg_concepto" class="form-control" placeholder="CONCEPTO" disabled="">
                                 </div>
+                            </div>
+                            
+                            <div class="row">
+                                
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="material-icons">attach_money</i>
+                                    </span>
+                                    <input type="text" id="dlg_total" class="form-control" placeholder="TOTAL" disabled="">
+                                </div>
+                            </div>
+                                
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="material-icons">book</i>
+                                    </span>
+                                    <div class="form-group">
+                                        <label for="tipo_pago">TIPO PAGO</label>
+                                        <select class="form-control" id="tipo_pago">
+                                            <option value='EFECTIVO' >EFECTIVO</option>
+                                            <option value='TARJETA DE CREDITO' >TARJETA DE CREDITO</option>
+                                        </select>
+                                      </div>
+                                </div>
+                            </div>
+                                
                             </div>
 
                         </div>

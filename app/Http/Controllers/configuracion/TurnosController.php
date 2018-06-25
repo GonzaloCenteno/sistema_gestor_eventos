@@ -21,6 +21,19 @@ class TurnosController extends Controller
         }
         return view('configuracion/vw_turnos',compact('menu','permisos'));
     }
+    
+    function autocompletar_auditorios(Request $request) 
+    {
+        $Consulta = DB::table('auditorio')->get();
+        $todo = array();
+        foreach ($Consulta as $Datos) {
+            $Lista = new \stdClass();
+            $Lista->value = $Datos->id_auditorio;
+            $Lista->label = trim($Datos->nombre_auditorio);
+            array_push($todo, $Lista);
+        }
+        return response()->json($todo);
+    }
 
     public function getTurnos(Request $request)
     {
@@ -33,8 +46,8 @@ class TurnosController extends Controller
         if ($start < 0) {
             $start = 0;
         }
-        $totalg = DB::select("select count(*) as total from vw_turno ");
-        $sql = DB::table('vw_turno')->orderBy($sidx, $sord)->limit($limit)->offset($start)->get();
+        $totalg = DB::select("select count(*) as total from vw_turno where desc_turno like '%".strtoupper($request['turnos'])."%'");
+        $sql = DB::table('vw_turno')->where('desc_turno','like', '%'.strtoupper($request['turnos']).'%')->orderBy($sidx, $sord)->limit($limit)->offset($start)->get();
 
         $total_pages = 0;
         if (!$sidx) {
@@ -67,41 +80,47 @@ class TurnosController extends Controller
 
     public function create(Request $request){
 
-        $Productos = new  Productos;
-        $Productos->desc_producto = $request['desc_producto'];
-        $Productos->precio = $request['precio'];
-        $Productos->save();
+        $Turnos = new Turnos;
+        $Turnos->desc_turno = strtoupper($request['desc_turno']);
+        $Turnos->hora_inicio = $request['hora_inicio'];
+        $Turnos->hora_fin = $request['hora_fin'];
+        $Turnos->id_auditorio = $request['id_auditorio'];
+        $Turnos->id_evento = $request['id_evento'];
+        $Turnos->save();
 
     }
 
-    public function show($id_producto)
+    public function show($id_turno)
     {
-       $Productos = DB::table('vw_productos')->where('id_producto',$id_producto)->get();
-       return $Productos;
+       $Turnos = DB::table('vw_turno')->where('id_turno',$id_turno)->get();
+       return $Turnos;
     }
 
-    public function edit($id_producto,Request $request)
+    public function edit($id_turno,Request $request)
     {
-        $Productos = new  Productos;
-        $val=  $Productos::where("id_producto","=",$request['id_producto'])->first();
+        $Turnos = new Turnos;
+        $val=  $Turnos::where("id_turno","=",$id_turno)->first();
         if(count($val)>=1)
         {
-            $val->desc_producto = $request['desc_producto'];
-            $val->precio = $request['precio'];
+            $val->desc_turno = trim(strtoupper($request['desc_turno']));
+            $val->hora_inicio = $request['hora_inicio'];
+            $val->hora_fin = $request['hora_fin'];
+            $val->id_auditorio = $request['id_auditorio'];
+            $val->id_evento = $request['id_evento'];
             $val->save();
         }
-        return $request['id_producto'];
+        return $id_turno;
     }
 
     public function destroy(Request $request)
     {
-        $Productos = new  Productos;
-        $val=  $Productos::where("id_producto","=",$request['id_producto'] )->first();
+        $Turnos = new Turnos;
+        $val=  $Turnos::where("id_turno","=",$request['id_turno'] )->first();
         if(count($val)>=1)
         {
             $val->delete();
         }
-        return "destroy ".$request['id_producto'];
+        return "destroy ".$request['id_turno'];
     }
 
 }

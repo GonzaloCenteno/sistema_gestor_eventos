@@ -12,13 +12,12 @@ $(document).ready(function () {
         colNames: ['ID', 'Nombre Turno', 'Hora Inicio','Hora fin','Auditorio','Evento'],
         rowNum: 10, sortname: 'id_turno', sortorder: 'desc', viewrecords: true, caption: 'LISTA DE TURNOS REGISTRADOS', align: "center",
         colModel: [
-            {name: 'id_turno', index: 'id_producto', hidden: true},
-            {name: 'desc_turno', index: 'desc_producto', align: 'center', width: 60},
-            {name: 'hora_inicio', index: 'desc_producto', align: 'center', width: 20},
-            {name: 'hora_fin', index: 'precio', align: 'center', width: 20},
-            {name: 'id_auditorio', index: 'precio', align: 'center', width: 20},
-            {name: 'id_evento', index: 'precio', align: 'center', width: 20}
-
+            {name: 'id_turno', index: 'id_turno', hidden: true},
+            {name: 'desc_turno', index: 'desc_turno', align: 'center', width: 30},
+            {name: 'hora_inicio', index: 'hora_inicio', align: 'center', width: 20},
+            {name: 'hora_fin', index: 'hora_fin', align: 'center', width: 20},
+            {name: 'nombre_auditorio', index: 'nombre_auditorio', align: 'center', width: 40},
+            {name: 'nombre_evento', index: 'nombre_evento', align: 'center', width: 40}
         ],
         pager: '#pager_table_Turnos',
         rowList: [5, 10, 15, 20],
@@ -31,35 +30,89 @@ $(document).ready(function () {
         },
         onSelectRow: function (Id) {},
         ondblClickRow: function (Id) {
-            modificar_producto();
+            modificar_turno();
         }
     });
 
-    $("#vw_buscar_materiales").keypress(function (e) {
+    $("#vw_buscar_turnos").keypress(function (e) {
             if (e.which == 13) {
-                buscar_materiales();
+                buscar_turnos();
             }
     });
 
 });
 
 function limpiar_formulario() {
-    $("#dlg_desc_producto").val('');
-    $("#dlg_precio").val('');
+    $("#dlg_descripcion_turno").val('');
+    $("#dlg_hora_inicio").val('');
+    $("#dlg_hora_fin").val('');
+    $("#hiddendlg_auditorio").val('');
+    $("#hiddendlg_evento").val('');
+    $("#dlg_auditorio").val('');
+    $("#dlg_evento").val('');
 }
 
+var aux1_turno=0;
+function autocompletar_eventos_turno(textbox){
+    $.ajax({
+        type: 'GET',
+        url: 'autocompletar_eventos',
+        success: function (data) {
+            var $datos = data;
+            $("#dlg_evento").autocomplete({
+                source: $datos,
+                focus: function (event, ui) {
+                    $("#" + textbox).val(ui.item.label);
+                    $("#hidden" + textbox).val(ui.item.value);
+                    $("#" + textbox).attr('maxlength', ui.item.label.length);
+                    return false;
+                },
+                select: function (event, ui) {
+                    $("#" + textbox).val(ui.item.label);
+                    $("#hidden" + textbox).val(ui.item.value);
+                    return false;
+                }
+            });
+        }
+    });
+}
 
-function nuevo_producto() {
-    $("#dialog_nuevo_producto").dialog({
-        autoOpen: false, modal: true, width: 550, 
+var aux1_auditorio=0;
+function autocompletar_auditorios(textbox){
+    $.ajax({
+        type: 'GET',
+        url: 'autocompletar_auditorios',
+        success: function (data) {
+            var $datos = data;
+            $("#dlg_auditorio").autocomplete({
+                source: $datos,
+                focus: function (event, ui) {
+                    $("#" + textbox).val(ui.item.label);
+                    $("#hidden" + textbox).val(ui.item.value);
+                    $("#" + textbox).attr('maxlength', ui.item.label.length);
+                    return false;
+                },
+                select: function (event, ui) {
+                    $("#" + textbox).val(ui.item.label);
+                    $("#hidden" + textbox).val(ui.item.value);
+                    return false;
+                }
+            });
+        }
+    });
+}
+
+function nuevo_turno() {
+    $("#dialog_nuevo_turno").dialog({
+        autoOpen: false, modal: true, width: 650, 
         show:{ effect: "explode", duration: 400},
         hide:{ effect: "explode", duration: 400}, resizable: false,
-        title: ".: CREAR NUEVO PRODUCTO :.",
+        title: ".: CREAR NUEVO TURNO :.",
         buttons: [{
                 html: "<i class='fa fa-save'></i>&nbsp; Guardar",
                 "class": "btn btn-success",
                 click: function () {
-                    guardar_editar_producto(1);
+                    guardar_editar_turno(1);
                 }
             }, {
                 html: "<i class='fa fa-sign-out'></i>&nbsp; Salir",
@@ -75,46 +128,83 @@ function nuevo_producto() {
             limpiar_formulario();
         }
     }).dialog('open');
+    
+    if(aux1_turno==0)
+    {
+        autocompletar_eventos_turno('dlg_evento');
+        aux1_turno=1;
+    }
+    
+    if(aux1_auditorio==0)
+    {
+        autocompletar_auditorios('dlg_auditorio');
+        aux1_auditorio=1;
+    }
+    
 }
 
-function guardar_editar_producto(tipo) {
+function guardar_editar_turno(tipo) {
 
-    desc_producto = $("#dlg_desc_producto").val();
-    precio = $("#dlg_precio").val();
+    desc_turno = $("#dlg_descripcion_turno").val();
+    hora_inicio = $("#dlg_hora_inicio").val();
+    hora_fin = $("#dlg_hora_fin").val();
+    id_auditorio = $("#hiddendlg_auditorio").val();
+    id_evento = $("#hiddendlg_evento").val();
    
     
-    if(desc_producto == "")
+    if(desc_turno == "")
     {
-        mostraralertasconfoco("* El Campo Nombre producto es Obligatorio","#dlg_desc_producto");
+        mostraralertasconfoco("* El Campo Nombre Turno es Obligatorio","#dlg_descripcion_turno");
         return false;
     }
 
-    if(precio == "")
+    if(hora_inicio == "")
     {
-        mostraralertasconfoco("* El Campo precio es Obligatorio","#dlg_precio");
+        mostraralertasconfoco("* El Campo Hora Inicio es Obligatorio","#dlg_hora_inicio");
+        return false;
+    }
+    
+    if(hora_fin == "")
+    {
+        mostraralertasconfoco("* El Campo Hora Fin es Obligatorio","#dlg_hora_fin");
+        return false;
+    }
+    
+    if(id_auditorio == "")
+    {
+        mostraralertasconfoco("* El Campo Nombre Auditorio es Obligatorio","#dlg_auditorio");
+        return false;
+    }
+    
+    if(id_evento == "")
+    {
+        mostraralertasconfoco("* El Campo Nombre Evento es Obligatorio","#dlg_evento");
         return false;
     }
 
     if (tipo == 1) {
-        MensajeDialogLoadAjax('table_Productos', '.:: Cargando ...');
+        MensajeDialogLoadAjax('table_Turnos', '.:: Cargando ...');
         $.ajax({
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            url: 'productos/create',
+            url: 'turno/create',
             type: 'GET',
             data: {
-                desc_producto:desc_producto,
-                precio:precio,
+                desc_turno:desc_turno,
+                hora_inicio:hora_inicio,
+                hora_fin:hora_fin,
+                id_auditorio:id_auditorio,
+                id_evento:id_evento
             },
             success: function(r) 
             {
                 MensajeExito("Se Guardo Correctamente","Su Registro Fue Insertado Correctamente...","top","right","success");
-                MensajeDialogLoadAjaxFinish('table_Productos');
-                fn_actualizar_grilla('table_Productos');
-                $("#dialog_nuevo_producto").dialog("close");
+                MensajeDialogLoadAjaxFinish('table_Turnos');
+                fn_actualizar_grilla('table_Turnos');
+                $("#dialog_nuevo_turno").dialog("close");
             },
             error: function(data) {
                 mostraralertas("hubo un error, Comunicar al Administrador");
-                MensajeDialogLoadAjaxFinish('table_Productos');
+                MensajeDialogLoadAjaxFinish('table_Turnos');
                 console.log('error');
                 console.log(data);
             }
@@ -122,29 +212,30 @@ function guardar_editar_producto(tipo) {
     }
     else if (tipo == 2) {
 
-        id_producto = $("#dlg_id_producto").val();
-        desc_producto = $("#dlg_desc_producto").val();
-        precio = $("#dlg_precio").val();
+        id_turno = $("#dlg_id_turno").val();
 
-        MensajeDialogLoadAjax('table_Productos', '.:: Cargando ...');
+        MensajeDialogLoadAjax('table_Turnos', '.:: Cargando ...');
         $.ajax({
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            url: 'productos/'+id_producto+'/edit',
+            url: 'turno/'+id_turno+'/edit',
             type: 'GET',
             data: {
-                 desc_producto:desc_producto,
-                precio:precio
+                desc_turno:desc_turno,
+                hora_inicio:hora_inicio,
+                hora_fin:hora_fin,
+                id_auditorio:id_auditorio,
+                id_evento:id_evento
             },
             success: function(r) 
             {
                 MensajeExito("Se Modifico Correctamente","Su Registro Fue Modificado Correctamente...","top","right","success");
-                MensajeDialogLoadAjaxFinish('table_Productos');
-                fn_actualizar_grilla('table_Productos');
-                $("#dialog_nuevo_producto").dialog("close");
+                MensajeDialogLoadAjaxFinish('table_Turnos');
+                fn_actualizar_grilla('table_Turnos');
+                $("#dialog_nuevo_turno").dialog("close");
             },
             error: function(data) {
                 mostraralertas("hubo un error, Comunicar al Administrador");
-                MensajeDialogLoadAjaxFinish('table_Productos');
+                MensajeDialogLoadAjaxFinish('table_Turnos');
                 console.log('error');
                 console.log(data);
             }
@@ -153,20 +244,20 @@ function guardar_editar_producto(tipo) {
  
 }
 
-function modificar_producto()
+function modificar_turno()
 {
-    id_producto = $('#table_Productos').jqGrid ('getGridParam', 'selrow');
+    id_turno = $('#table_Turnos').jqGrid ('getGridParam', 'selrow');
 
-    if (id_producto) {
+    if (id_turno) {
 
-        $("#dialog_nuevo_producto").dialog({
-            autoOpen: false, modal: true, width: 600, show: {effect: "fade", duration: 300}, resizable: false,
-            title: ".: EDITAR PRODUCTO :.",
+        $("#dialog_nuevo_turno").dialog({
+            autoOpen: false, modal: true, width: 650, show: {effect: "fade", duration: 300}, resizable: false,
+            title: ".: EDITAR TURNO :.",
             buttons: [{
                 html: "<i class='fa fa-save'></i>&nbsp; Guardar",
                 "class": "btn btn-success bg-color-green",
                 click: function () {
-                    guardar_editar_producto(2);
+                    guardar_editar_turno(2);
                 }
             }, {
                 html: "<i class='fa fa-sign-out'></i>&nbsp; Salir",
@@ -176,46 +267,63 @@ function modificar_producto()
                 }
             }],
         });
-        $("#dialog_nuevo_producto").dialog('open');
+        $("#dialog_nuevo_turno").dialog('open');
+        
+        if(aux1_turno==0)
+        {
+            autocompletar_eventos_turno('dlg_evento');
+            aux1_turno=1;
+        }
 
-        MensajeDialogLoadAjax('dialog_nuevo_producto', '.:: Cargando ...');
+        if(aux1_auditorio==0)
+        {
+            autocompletar_auditorios('dlg_auditorio');
+            aux1_auditorio=1;
+        }
 
-        $.ajax({url: 'productos/'+id_producto,
+        MensajeDialogLoadAjax('dialog_nuevo_turno', '.:: Cargando ...');
+
+        $.ajax({url: 'turno/'+id_turno,
             type: 'GET',
             success: function(datos)
             {
-                $("#dlg_id_producto").val(datos[0].id_producto);
-                $("#dlg_desc_producto").val(datos[0].desc_producto);
-                $("#dlg_precio").val(datos[0].precio);
-                MensajeDialogLoadAjaxFinish('dialog_nuevo_producto');
+                $("#dlg_id_turno").val(datos[0].id_turno);
+                $("#dlg_descripcion_turno").val(datos[0].desc_turno);
+                $("#dlg_hora_inicio").val(datos[0].hora_inicio);
+                $("#dlg_hora_fin").val(datos[0].hora_fin);
+                $("#dlg_auditorio").val(datos[0].nombre_auditorio);
+                $("#dlg_evento").val(datos[0].nombre_evento);
+                $("#hiddendlg_evento").val(datos[0].id_evento);
+                $("#hiddendlg_auditorio").val(datos[0].id_auditorio);
+                MensajeDialogLoadAjaxFinish('dialog_nuevo_turno');
 
             },
             error: function(data) {
                 mostraralertas("Hubo un Error, Comunicar al Administrador");
                 console.log('error');
                 console.log(data);
-                MensajeDialogLoadAjaxFinish('dialog_nuevo_producto');
+                MensajeDialogLoadAjaxFinish('dialog_nuevo_turno');
             }
         });
     }else{
-        mostraralertasconfoco("No Hay Registros Seleccionados","#table_Productos");
+        mostraralertasconfoco("No Hay Registros Seleccionados","#table_Turnos");
     }
 }
 
 
-function eliminar_producto(){
-    id_producto = $('#table_Productos').jqGrid ('getGridParam', 'selrow');
+function eliminar_turno(){
+    id_turno = $('#table_Turnos').jqGrid ('getGridParam', 'selrow');
     
-    if(id_producto == null)
+    if(id_turno == null)
     {
-        mostraralertasconfoco("No hay Registros seleccionados","#table_Productos");
+        mostraralertasconfoco("No hay Registros seleccionados","#table_Turnos");
         return false;
     }
     
-    desc_producto = $('#table_Productos').jqGrid ('getCell', id_producto, 'desc_producto');
+    desc_turno = $('#table_Turnos').jqGrid ('getCell', id_turno, 'desc_turno');
     
     swal({
-          title: '¿Está Seguro que desea Eliminar El producto ' + desc_producto + ' ?',
+          title: '¿Está Seguro que desea Eliminar El Turno ' + desc_turno + ' ?',
           text: "Los Cambios no se podran revertir!",
           type: 'warning',
           showCancelButton: true,
@@ -228,7 +336,7 @@ function eliminar_producto(){
           buttonsStyling: false,
           reverseButtons: true
         }).then(function(result) {
-              fn_elimiar_producto();
+              fn_elimiar_turno();
             }, function(dismiss) {
               MensajeExito("Mensaje del Sistema","Operacion Cancelada","top","right","danger");
             });
@@ -236,23 +344,23 @@ function eliminar_producto(){
         audio_1.play();
 }
 
-function fn_elimiar_producto() {
-    id_producto = $('#table_Productos').jqGrid ('getGridParam', 'selrow');
+function fn_elimiar_turno() {
+    id_turno = $('#table_Turnos').jqGrid ('getGridParam', 'selrow');
 
     $.ajax({
-        url: 'productos/destroy',
+        url: 'turno/destroy',
         type: 'POST',
-        data: {_method: 'delete',_token:$("#btn_vw_productos_eliminar").data('token'),id_producto: id_producto},
+        data: {_method: 'delete',_token:$("#btn_vw_turno_eliminar").data('token'),id_turno: id_turno},
         success: function (data) {
             MensajeAlerta("Se Eliminó Correctamente","Su Registro Fue eliminado Correctamente...","top","right","success");
-            fn_actualizar_grilla('table_Productos');
+            fn_actualizar_grilla('table_Turnos');
         }, error: function (data) {
             MensajeAlerta('* Error.', 'Contactese con el Administrador.');
         }
     });
 }
 
-function buscar_materiales(){
-    materiales = $("#vw_buscar_materiales").val();
-    fn_actualizar_grilla('table_Materiales','getMateriales?materiales='+materiales);
+function buscar_turnos(){
+    turnos = $("#vw_buscar_turnos").val();
+    fn_actualizar_grilla('table_Turnos','getTurnos?turnos='+turnos);
 }
