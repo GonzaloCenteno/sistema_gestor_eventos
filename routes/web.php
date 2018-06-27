@@ -104,6 +104,9 @@ Route::group(['namespace' => 'configuracion'], function() {
 
 Route::group(['namespace' => 'inventario'], function() {
         Route::resource('inventario', 'InventarioController');
+        Route::get('getInventario', 'InventarioController@getInventario');
+        Route::get('getInventario_entradas', 'InventarioController@getInventario_entradas');
+        Route::get('getInventario_salidas', 'InventarioController@getInventario_salidas');
 
 });
 

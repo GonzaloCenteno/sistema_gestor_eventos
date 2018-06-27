@@ -84,7 +84,7 @@ class MaterialesController extends Controller
         $tipo_material = $request['tipo_material'];
         $stock = $request['stock'];
 
-        $editar_material = DB::select("select modificar_materiales(".$id_material.", '".$nombre_material."', '".$tipo_material."', ".$stock.")");
+        $editar_material = DB::select("select modificar_materiales(".$id_material.", '".$nombre_material."', '".$tipo_material."')");
     }
 
     public function destroy(Request $request)

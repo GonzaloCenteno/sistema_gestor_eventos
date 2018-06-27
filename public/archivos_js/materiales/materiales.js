@@ -49,6 +49,7 @@ function limpiar_formulario() {
 
 
 function nuevo_material() {
+    $('#contenedor_stock').show();
     $("#dialog_nuevo_material").dialog({
         autoOpen: false, modal: true, width: 550, 
         show:{ effect: "explode", duration: 400},
@@ -90,13 +91,7 @@ function guardar_editar_material(tipo) {
 
     if(tipo_material == "")
     {
-        mostraralertasconfoco("* El Campo Tipo Material es Obligatorio","#tipo_material");
-        return false;
-    }
-
-    if(stock == "")
-    {
-        mostraralertasconfoco("* El Campo Stock es Obligatorio","#dlg_stock");
+        mostraralertasconfoco("* El Campo Tipo Material es Obligatorio","#dlg_tipo_material");
         return false;
     }
 
@@ -137,8 +132,7 @@ function guardar_editar_material(tipo) {
             type: 'GET',
             data: {
                 nombre_material:nombre_material,
-                tipo_material:tipo_material,
-                stock:stock
+                tipo_material:tipo_material
             },
             success: function(r) 
             {
@@ -161,7 +155,7 @@ function guardar_editar_material(tipo) {
 function modificar_material()
 {
     id_material = $('#table_Materiales').jqGrid ('getGridParam', 'selrow');
-
+    $('#contenedor_stock').hide();
     if (id_material) {
 
         $("#dialog_nuevo_material").dialog({
@@ -192,7 +186,6 @@ function modificar_material()
                 $("#dlg_id_material").val(datos[0].id_material);
                 $("#dlg_nombre_material").val(datos[0].nombre_material);
                 $("#dlg_tipo_material").val(datos[0].tipo_material);
-                $("#dlg_stock").val(datos[0].sctock);
                 MensajeDialogLoadAjaxFinish('dialog_nuevo_material');
 
             },

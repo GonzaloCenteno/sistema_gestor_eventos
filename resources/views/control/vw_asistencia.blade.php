@@ -164,6 +164,7 @@
                                         <span class="input-group-addon">
                                             <i class="material-icons">settings</i>
                                         </span>
+                                        <input type="hidden" id="hidden_stock">
                                         <input type="hidden" id="hiddendlg_material">
                                         <input type="text" id="dlg_material" maxlength="100" class="form-control text-uppercase text-center" placeholder="ESCRIBIR NOMBRE MATERIAL">
                                     </div>

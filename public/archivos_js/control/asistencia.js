@@ -94,7 +94,7 @@ function buscar_recibo()
             if (data.msg === 'si'){
                 MensajeDialogLoadAjaxFinish('dialog_nueva_asistencia');
                 MensajeExito('Numero de Recibo Encontrado', 'La Operacion se Ejecuto Correctamente.');
-                
+
                 $('#dlg_concepto').val(data.concepto);
                 $('#dlg_name').val(data.name);
                 $('#dlg_tipo_persona').val(data.tipo_persona);
@@ -109,8 +109,12 @@ function buscar_recibo()
                     jQuery("#table_detalle_asistencia").jqGrid('setGridParam', {url: 'buscar_eventos_by_usuarios?indice='+$('#id_usuario').val() }).trigger('reloadGrid');
                 }
                 
+            }else if(data.msg === 'existe'){
+                mostraralertasconfoco("Mensaje del Sistema, EL NUMERO DE RECIBO YA FUE REGISTRADO");
+                limpiar_formulario();
+                MensajeDialogLoadAjaxFinish('dialog_nueva_asistencia');
             }else{
-                mostraralertasconfoco("Mensaje del Sistema, NO EXISTE EL NUMERO DE RECIBO");
+                mostraralertasconfoco("Mensaje del Sistema, EL NUMERO DE RECIBO NO EXISTE");
                 limpiar_formulario();
                 MensajeDialogLoadAjaxFinish('dialog_nueva_asistencia');
             }
@@ -139,6 +143,7 @@ function limpiar_formulario() {
 
 
 function nueva_asistencia() {
+    $("#dlg_nro_recibo").removeAttr('disabled');
     $("#dialog_nueva_asistencia").dialog({
         autoOpen: false, modal: true, width: 800, 
         show:{ effect: "explode", duration: 400},
@@ -220,6 +225,7 @@ function buscar_asistencias(){
 }
 
 function modificar_asistencias(){
+    $("#dlg_nro_recibo").attr('disabled',true);
     $("#dialog_nueva_asistencia").dialog({
         autoOpen: false, modal: true, width: 800, show: {effect: "fade", duration: 300}, resizable: false,
         title: ".:  EDITAR ASISTENCIAS :.",
@@ -330,6 +336,7 @@ function limpiar_formulario_material(){
     $("#hiddendlg_material").val('');
     $("#dlg_material").val('');
     $("#dlg_cantidad").val('');
+    $("#hidden_stock").val('');
 }
 
 
@@ -382,11 +389,13 @@ function autocompletar_materiales(textbox){
                     $("#" + textbox).val(ui.item.label);
                     $("#hidden" + textbox).val(ui.item.value);
                     $("#" + textbox).attr('maxlength', ui.item.label.length);
+                    $("#hidden_stock").val(ui.item.stock);
                     return false;
                 },
                 select: function (event, ui) {
                     $("#" + textbox).val(ui.item.label);
                     $("#hidden" + textbox).val(ui.item.value);
+                    $("#hidden_stock").val(ui.item.stock);
                     return false;
                 }
             });
@@ -399,6 +408,7 @@ function fn_guardar_material_asistencia(){
     id_material = $("#hiddendlg_material").val();
     material = $("#dlg_material").val();
     cantidad = $("#dlg_cantidad").val();
+    stock = $("#hidden_stock").val();
 
     if (id_material == '') {
         mostraralertasconfoco('* El Campo Nombre Material es Obligatorio...', '#dlg_material');
@@ -407,6 +417,16 @@ function fn_guardar_material_asistencia(){
     
     if (cantidad == '') {
         mostraralertasconfoco('* El Campo Cantidad Material es Obligatorio...', '#dlg_cantidad');
+        return false;
+    }
+    
+    if (stock == 0) {
+        mostraralertasconfoco('* El Material ya no Tiene stock...', '#dlg_cantidad');
+        return false;
+    }
+    
+    if ((stock - cantidad) < 0) {
+        mostraralertasconfoco('* La cantidad que deseas guardar excede el stock en inventario...', '#dlg_cantidad');
         return false;
     }
     

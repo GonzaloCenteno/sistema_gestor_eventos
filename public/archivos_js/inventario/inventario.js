@@ -5,16 +5,16 @@ $(document).ready(function () {
     $("#menu_inventario").css({ 'background-color' : '#9930B0', 'border-radius' : '20px' });
 
     jQuery("#table_Inventario").jqGrid({
-        url: '',
+        url: 'getInventario',
         datatype: 'json', mtype: 'GET',
         height: 'auto', autowidth: true,
         toolbarfilter: true,
-        colNames: ['ID', 'Nombre Producto', 'Precio'],
-        rowNum: 10, sortname: 'id_producto', sortorder: 'desc', viewrecords: true, caption: 'LISTA DE PRODUCTOS EN INVENTARIO', align: "center",
+        colNames: ['ID', 'NOMBRE MATERIAL', 'STOCK'],
+        rowNum: 20, sortname: 'id_material', sortorder: 'desc', viewrecords: true, caption: 'LISTA MATERIALES EN INVENTARIO', align: "center",
         colModel: [
-            {name: 'id_producto', index: 'id_producto', hidden: true},
-            {name: 'desc_producto', index: 'desc_producto', align: 'center', width: 80},
-            {name: 'precio', index: 'precio', align: 'center', width: 70}
+            {name: 'id_material', index: 'id_material', hidden: true},
+            {name: 'nombre_material', index: 'nombre_material', align: 'center', width: 80},
+            {name: 'sctock', index: 'sctock', align: 'center', width: 20}
         ],
         pager: '#pager_table_Inventario',
         rowList: [5, 10, 15, 20],
@@ -25,91 +25,122 @@ $(document).ready(function () {
                             $("#table_Inventario").setSelection(firstid);    
                         }
         },
-        onSelectRow: function (Id) {},
-        ondblClickRow: function (Id) {
-            modificar_producto();
+        onSelectRow: function (id_material) {
+            fn_actualizar_grilla('table_Entrada','getInventario_entradas?id_material='+id_material); 
+            fn_actualizar_grilla('table_Salida','getInventario_salidas?id_material='+id_material); 
+            material = $('#table_Inventario').jqGrid ('getCell', id_material, 'id_material');
+        },
+        ondblClickRow: function (id_material) {
+            agregar_stock(id_material);
         }
     });
     
-    jQuery("#table_Entrada").jqGrid({
-        url: '',
-        datatype: 'json', mtype: 'GET',
-        height: 'auto', autowidth: true,
-        toolbarfilter: true,
-        colNames: ['ID', 'Nombre Producto', 'Precio'],
-        rowNum: 10, sortname: 'id_producto', sortorder: 'desc', viewrecords: true, caption: 'LISTA DE ENTRADAS', align: "center",
-        colModel: [
-            {name: 'id_producto', index: 'id_producto', hidden: true},
-            {name: 'desc_producto', index: 'desc_producto', align: 'center', width: 80},
-            {name: 'precio', index: 'precio', align: 'center', width: 70}
-        ],
-        pager: '#pager_table_Entrada',
-        rowList: [5, 10, 15, 20],
-        gridComplete: function () {
-                    var idarray = jQuery('#table_Entrada').jqGrid('getDataIDs');
-                    if (idarray.length > 0) {
-                    var firstid = jQuery('#table_Entrada').jqGrid('getDataIDs')[0];
-                            $("#table_Entrada").setSelection(firstid);    
-                        }
-        },
-        onSelectRow: function (Id) {},
-        ondblClickRow: function (Id) {
-            modificar_producto();
-        }
-    });
+    setTimeout(function(){
+        
+        
+        jQuery("#table_Entrada").jqGrid({
+            url: 'getInventario_entradas?id_material='+material,
+            datatype: 'json', mtype: 'GET',
+            height: 'auto', autowidth: true,
+            toolbarfilter: true,
+            colNames: ['ID', 'CANTIDAD', 'REGISTRO', 'MATERIAL'],
+            rowNum: 5, sortname: 'id_material', sortorder: 'desc', viewrecords: true, caption: 'LISTA DE ENTRADAS', align: "center",
+            colModel: [
+                {name: 'id_material', index: 'id_material', hidden: true},
+                {name: 'cantidad', index: 'cantidad', align: 'center', width: 10},
+                {name: 'fecha_registro', index: 'fecha_registro', align: 'center', width: 10},
+                {name: 'nombre_material', index: 'nombre_material', align: 'center', width: 40}
+            ],
+            pager: '#pager_table_Entrada',
+            rowList: [5, 10, 15, 20],
+            gridComplete: function () {
+                        var idarray = jQuery('#table_Entrada').jqGrid('getDataIDs');
+                        if (idarray.length > 0) {
+                        var firstid = jQuery('#table_Entrada').jqGrid('getDataIDs')[0];
+                                $("#table_Entrada").setSelection(firstid);    
+                            }
+            }
+        });
+       MensajeDialogLoadAjaxFinish('content');
+    }, 500);
     
-    jQuery("#table_Salida").jqGrid({
-        url: '',
-        datatype: 'json', mtype: 'GET',
-        height: 'auto', autowidth: true,
-        toolbarfilter: true,
-        colNames: ['ID', 'Nombre Producto', 'Precio'],
-        rowNum: 10, sortname: 'id_producto', sortorder: 'desc', viewrecords: true, caption: 'LISTA DE SALIDAS', align: "center",
-        colModel: [
-            {name: 'id_producto', index: 'id_producto', hidden: true},
-            {name: 'desc_producto', index: 'desc_producto', align: 'center', width: 80},
-            {name: 'precio', index: 'precio', align: 'center', width: 70}
-        ],
-        pager: '#pager_table_Salida',
-        rowList: [5, 10, 15, 20],
-        gridComplete: function () {
-                    var idarray = jQuery('#table_Salida').jqGrid('getDataIDs');
-                    if (idarray.length > 0) {
-                    var firstid = jQuery('#table_Salida').jqGrid('getDataIDs')[0];
-                            $("#table_Salida").setSelection(firstid);    
-                        }
-        },
-        onSelectRow: function (Id) {},
-        ondblClickRow: function (Id) {
-            modificar_producto();
-        }
-    });
+    setTimeout(function(){
+        jQuery("#table_Salida").jqGrid({
+            url: 'getInventario_salidas?id_material='+material,
+            datatype: 'json', mtype: 'GET',
+            height: 'auto', autowidth: true,
+            toolbarfilter: true,
+            colNames: ['ID', 'CANTIDAD', 'REGISTRO', 'MATERIAL'],
+            rowNum: 5, sortname: 'id_material', sortorder: 'desc', viewrecords: true, caption: 'LISTA DE SALIDAS', align: "center",
+            colModel: [
+                {name: 'id_material', index: 'id_material', hidden: true},
+                {name: 'cantidad', index: 'cantidad', align: 'center', width: 10},
+                {name: 'fecha_registro', index: 'fecha_registro', align: 'center', width: 10},
+                {name: 'nombre_material', index: 'nombre_material', align: 'center', width: 40}
+            ],
+            pager: '#pager_table_Salida',
+            rowList: [5, 10, 15, 20],
+            gridComplete: function () {
+                        var idarray = jQuery('#table_Salida').jqGrid('getDataIDs');
+                        if (idarray.length > 0) {
+                        var firstid = jQuery('#table_Salida').jqGrid('getDataIDs')[0];
+                                $("#table_Salida").setSelection(firstid);    
+                            }
+            }
+        });
+       MensajeDialogLoadAjaxFinish('content');
+    }, 500);
 
-    $("#vw_buscar_productos").keypress(function (e) {
+    $("#vw_buscar_materiales").keypress(function (e) {
             if (e.which == 13) {
-                buscar_productos();
+                buscar_materiales();
             }
     });
 
 });
 
+var aux1_material_inventario=0;
+function autocompletar_materiales_inventario(textbox){
+    $.ajax({
+        type: 'GET',
+        url: 'autocompletar_materiales',
+        success: function (data) {
+            var $datos = data;
+            $("#dlg_material_inventario").autocomplete({
+                source: $datos,
+                focus: function (event, ui) {
+                    $("#" + textbox).val(ui.item.label);
+                    $("#hidden" + textbox).val(ui.item.value);
+                    $("#" + textbox).attr('maxlength', ui.item.label.length);
+                    return false;
+                },
+                select: function (event, ui) {
+                    $("#" + textbox).val(ui.item.label);
+                    $("#hidden" + textbox).val(ui.item.value);
+                    return false;
+                }
+            });
+        }
+    });
+}
+
 function limpiar_formulario() {
-    $("#dlg_desc_producto").val('');
-    $("#dlg_precio").val('');
+    $("#hiddendlg_material_inventario").val('');
+    $("#dlg_material_inventario").val('');
 }
 
 
-function nuevo_producto() {
-    $("#dialog_nuevo_producto").dialog({
-        autoOpen: false, modal: true, width: 550, 
+function nuevo_inventario() {
+    $("#dialog_nuevo_producto_inventario").dialog({
+        autoOpen: false, modal: true, width: 600, 
         show:{ effect: "explode", duration: 400},
         hide:{ effect: "explode", duration: 400}, resizable: false,
-        title: ".: CREAR NUEVO PRODUCTO :.",
+        title: ".: AGREGAR MATERIAL A INVENTARIO :.",
         buttons: [{
                 html: "<i class='fa fa-save'></i>&nbsp; Guardar",
                 "class": "btn btn-success",
                 click: function () {
-                    guardar_editar_producto(1);
+                    guardar_material_inventario();
                 }
             }, {
                 html: "<i class='fa fa-sign-out'></i>&nbsp; Salir",
@@ -125,96 +156,79 @@ function nuevo_producto() {
             limpiar_formulario();
         }
     }).dialog('open');
+    
+    if(aux1_material_inventario==0)
+    {
+        autocompletar_materiales_inventario('dlg_material_inventario');
+        aux1_material_inventario=1;
+    }
 }
 
-function guardar_editar_producto(tipo) {
+function guardar_material_inventario() {
 
-    desc_producto = $("#dlg_desc_producto").val();
-    precio = $("#dlg_precio").val();
+    id_material = $("#hiddendlg_material_inventario").val();
+    material = $("#dlg_material_inventario").val();
    
     
-    if(desc_producto == "")
+    if(id_material == "")
     {
-        mostraralertasconfoco("* El Campo Nombre producto es Obligatorio","#dlg_desc_producto");
+        mostraralertasconfoco("* El Campo Nombre Material es Obligatorio","#dlg_material_inventario");
         return false;
     }
 
-    if(precio == "")
-    {
-        mostraralertasconfoco("* El Campo precio es Obligatorio","#dlg_precio");
-        return false;
-    }
 
-    if (tipo == 1) {
-        MensajeDialogLoadAjax('table_Productos', '.:: Cargando ...');
-        $.ajax({
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            url: 'productos/create',
-            type: 'GET',
-            data: {
-                desc_producto:desc_producto,
-                precio:precio
-            },
-            success: function(r) 
-            {
+    MensajeDialogLoadAjax('table_Inventario', '.:: Cargando ...');
+    $.ajax({
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        url: 'inventario/create',
+        type: 'GET',
+        data: {
+            id_material:id_material
+        },
+        success: function(data) 
+        {
+            if (data.msg == 'repetido') {
+                mostraralertasconfoco("EL PRODUCTO YA FUE REGISTRADO EN INVENTARIO","#dlg_material_inventario");
+                MensajeDialogLoadAjaxFinish('table_Inventario');
+                $("#dlg_material_inventario").val('');
+                $("#hiddendlg_material_inventario").val('');
+            }else{
                 MensajeExito("Se Guardo Correctamente","Su Registro Fue Insertado Correctamente...","top","right","success");
-                MensajeDialogLoadAjaxFinish('table_Productos');
-                fn_actualizar_grilla('table_Productos');
-                $("#dialog_nuevo_producto").dialog("close");
-            },
-            error: function(data) {
-                mostraralertas("hubo un error, Comunicar al Administrador");
-                MensajeDialogLoadAjaxFinish('table_Productos');
-                console.log('error');
-                console.log(data);
+                MensajeDialogLoadAjaxFinish('table_Inventario');
+                fn_actualizar_grilla('table_Inventario');
+                $("#dlg_material_inventario").val('');
+                $("#hiddendlg_material_inventario").val('');
             }
-        });
-    }
-    else if (tipo == 2) {
+        },
+        error: function(data) {
+            mostraralertas("hubo un error, Comunicar al Administrador");
+            MensajeDialogLoadAjaxFinish('table_Inventario');
+            console.log('error');
+            console.log(data);
+        }
+    });
 
-        id_producto = $("#dlg_id_producto").val();
-
-        MensajeDialogLoadAjax('table_Productos', '.:: Cargando ...');
-        $.ajax({
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            url: 'productos/'+id_producto+'/edit',
-            type: 'GET',
-            data: {
-                 desc_producto:desc_producto,
-                 precio:precio
-            },
-            success: function(r) 
-            {
-                MensajeExito("Se Modifico Correctamente","Su Registro Fue Modificado Correctamente...","top","right","success");
-                MensajeDialogLoadAjaxFinish('table_Productos');
-                fn_actualizar_grilla('table_Productos');
-                $("#dialog_nuevo_producto").dialog("close");
-            },
-            error: function(data) {
-                mostraralertas("hubo un error, Comunicar al Administrador");
-                MensajeDialogLoadAjaxFinish('table_Productos');
-                console.log('error');
-                console.log(data);
-            }
-        });
-    }
- 
 }
 
-function modificar_producto()
+function limpiar_formulario_stock(){
+    $("#hiddendlg_material_stock").val('');
+    $("#dlg_material_stock").val('');
+    $("#dlg_stock").val('');
+}
+
+function agregar_stock(id_material)
 {
-    id_producto = $('#table_Productos').jqGrid ('getGridParam', 'selrow');
-
-    if (id_producto) {
-
-        $("#dialog_nuevo_producto").dialog({
-            autoOpen: false, modal: true, width: 600, show: {effect: "fade", duration: 300}, resizable: false,
-            title: ".: EDITAR PRODUCTO :.",
-            buttons: [{
+      
+    $("#dialog_agregar_stock").dialog({
+        autoOpen: false, modal: true, width: 600, 
+        show:{ effect: "explode", duration: 400},
+        hide:{ effect: "explode", duration: 400}, resizable: false,
+        title: ".: AGREGAR STOCK A MATERIAL :.",
+        buttons: [{
                 html: "<i class='fa fa-save'></i>&nbsp; Guardar",
-                "class": "btn btn-success bg-color-green",
+                "class": "btn btn-success",
                 click: function () {
-                    guardar_editar_producto(2);
+                    guardar_stock();
                 }
             }, {
                 html: "<i class='fa fa-sign-out'></i>&nbsp; Salir",
@@ -223,84 +237,75 @@ function modificar_producto()
                     $(this).dialog("close");
                 }
             }],
-        });
-        $("#dialog_nuevo_producto").dialog('open');
+        close: function (event, ui) {
+            limpiar_formulario_stock();
+        }
+    }).dialog('open');
+    
+    MensajeDialogLoadAjax('dialog_agregar_stock', '.:: Cargando ...');
 
-        MensajeDialogLoadAjax('dialog_nuevo_producto', '.:: Cargando ...');
+    $.ajax({url: 'inventario/'+id_material,
+        type: 'GET',
+        success: function(datos)
+        {
+            $("#hiddendlg_material_stock").val(datos[0].id_material);
+            $("#dlg_material_stock").val(datos[0].nombre_material);
+            MensajeDialogLoadAjaxFinish('dialog_agregar_stock');
 
-        $.ajax({url: 'productos/'+id_producto,
-            type: 'GET',
-            success: function(datos)
-            {
-                $("#dlg_id_producto").val(datos[0].id_producto);
-                $("#dlg_desc_producto").val(datos[0].desc_producto);
-                $("#dlg_precio").val(datos[0].precio);
-                MensajeDialogLoadAjaxFinish('dialog_nuevo_producto');
+        },
+        error: function(data) {
+            mostraralertas("Hubo un Error, Comunicar al Administrador");
+            console.log('error');
+            console.log(data);
+            MensajeDialogLoadAjaxFinish('dialog_agregar_stock');
+        }
+    });
 
-            },
-            error: function(data) {
-                mostraralertas("Hubo un Error, Comunicar al Administrador");
-                console.log('error');
-                console.log(data);
-                MensajeDialogLoadAjaxFinish('dialog_nuevo_producto');
-            }
-        });
-    }else{
-        mostraralertasconfoco("No Hay Registros Seleccionados","#table_Productos");
-    }
 }
 
-
-function eliminar_producto(){
-    id_producto = $('#table_Productos').jqGrid ('getGridParam', 'selrow');
-    
-    if(id_producto == null)
+function guardar_stock(){
+    id_material_stock = $("#hiddendlg_material_stock").val();
+    stock = $("#dlg_stock").val();
+   
+    if(id_material_stock == "")
     {
-        mostraralertasconfoco("No hay Registros seleccionados","#table_Productos");
+        mostraralertasconfoco("* El Campo Nombre Material es Obligatorio","#dlg_material_stock");
         return false;
     }
     
-    desc_producto = $('#table_Productos').jqGrid ('getCell', id_producto, 'desc_producto');
-    
-    swal({
-          title: '¿Está Seguro que desea Eliminar El producto ' + desc_producto + ' ?',
-          text: "Los Cambios no se podran revertir!",
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'ACEPTAR',
-          cancelButtonText: 'CANCELAR',
-          confirmButtonClass: 'btn btn-success',
-          cancelButtonClass: 'btn btn-danger',
-          buttonsStyling: false,
-          reverseButtons: true
-        }).then(function(result) {
-              fn_elimiar_producto();
-            }, function(dismiss) {
-              MensajeExito("Mensaje del Sistema","Operacion Cancelada","top","right","danger");
-            });
-        var audio_1 = document.getElementById("audio_messagebox");
-        audio_1.play();
-}
+    if(stock == "")
+    {
+        mostraralertasconfoco("* El Campo Stock Material es Obligatorio","#dlg_stock");
+        return false;
+    }
 
-function fn_elimiar_producto() {
-    id_producto = $('#table_Productos').jqGrid ('getGridParam', 'selrow');
 
+    MensajeDialogLoadAjax('table_Inventario', '.:: Cargando ...');
     $.ajax({
-        url: 'productos/destroy',
-        type: 'POST',
-        data: {_method: 'delete',_token:$("#btn_vw_productos_eliminar").data('token'),id_producto: id_producto},
-        success: function (data) {
-            MensajeAlerta("Se Eliminó Correctamente","Su Registro Fue eliminado Correctamente...","top","right","success");
-            fn_actualizar_grilla('table_Productos');
-        }, error: function (data) {
-            MensajeAlerta('* Error.', 'Contactese con el Administrador.');
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        url: 'inventario/'+id_material_stock+'/edit',
+        type: 'GET',
+        data: {
+            stock:stock
+        },
+        success: function(data) 
+        {
+            MensajeExito("Se Guardo Correctamente","Su Registro Fue Insertado Correctamente...","top","right","success");
+            MensajeDialogLoadAjaxFinish('table_Inventario');
+            fn_actualizar_grilla('table_Inventario');
+            limpiar_formulario_stock();
+            $("#dialog_agregar_stock").dialog("close");
+        },
+        error: function(data) {
+            mostraralertas("hubo un error, Comunicar al Administrador");
+            MensajeDialogLoadAjaxFinish('table_Inventario');
+            console.log('error');
+            console.log(data);
         }
     });
 }
 
-function buscar_productos(){
-    productos = $("#vw_buscar_productos").val();
-    fn_actualizar_grilla('table_Productos','getProductos?productos='+productos);
+function buscar_materiales(){
+    nombre = $("#vw_buscar_materiales").val();
+    fn_actualizar_grilla('table_Inventario','getInventario?nombre='+nombre);
 }

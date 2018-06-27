@@ -28,16 +28,24 @@ class AsistenciaController extends Controller
         $recibo = DB::table('vw_impresion_recibo_cabecera')->where('nro_recibo',strtoupper($nro_recibo))->first();
         
         if ($recibo) {
-            return response()->json([
-                'msg' => 'si',
-                'concepto' => $recibo->concepto,
-                'name' => $recibo->name,
-                'tipo_persona' => $recibo->tipo_persona,
-                'nacionalidad' => $recibo->nacionalidad,
-                'tip_doc_ident' => $recibo->tip_doc_ident,
-                'num_ident' => $recibo->num_ident,
-                'id' => $recibo->id,
-            ]);
+            
+            $datos_recibo = DB::table('vw_asistencias_persona')->where('nro_recibo',$recibo->nro_recibo)->first();
+            if ($datos_recibo) {
+                return response()->json([
+                    'msg' => 'existe',
+                ]);
+            }else{
+                return response()->json([
+                    'msg' => 'si',
+                    'concepto' => $recibo->concepto,
+                    'name' => $recibo->name,
+                    'tipo_persona' => $recibo->tipo_persona,
+                    'nacionalidad' => $recibo->nacionalidad,
+                    'tip_doc_ident' => $recibo->tip_doc_ident,
+                    'num_ident' => $recibo->num_ident,
+                    'id' => $recibo->id,
+                ]);
+            }
         }else{
             return response()->json([
                 'msg' => 'no',
@@ -262,6 +270,7 @@ class AsistenciaController extends Controller
             $Lista = new \stdClass();
             $Lista->value = $Datos->id_material;
             $Lista->label = trim(strtoupper($Datos->nombre_material));
+            $Lista->stock = $Datos->sctock;
             array_push($todo, $Lista);
         }
         return response()->json($todo);
