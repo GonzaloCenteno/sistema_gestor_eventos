@@ -131,7 +131,7 @@
                                 </div>
                             </div>
                             
-                            <div class="col-sm-12" style="padding-left: 70px">
+                            <div class="col-sm-12" style="padding-left: 5px">
                                 <input type="hidden" id="id_usuario">
                                 <table id="table_detalle_asistencia"></table>
                                 <div id="pager_table_detalle_asistencia" style="color:black;"></div>                            

@@ -40,13 +40,14 @@ $(document).ready(function () {
         datatype: 'json', mtype: 'GET',
         height: 'auto', autowidth: true,
         toolbarfilter: true,
-        colNames: ['ID', 'NOMBRE EVENTO', 'ASISTENCIA','ID_ASISTENCIA'],
+        colNames: ['ID', 'NOMBRE EVENTO', 'ASISTENCIA','ID_ASISTENCIA','TURNO'],
         rowNum: 10, sortname: 'id_turno', sortorder: 'desc', viewrecords: true, caption: 'LISTA DE EVENTOS', align: "center",
         colModel: [
             {name: 'id_turno', index: 'id_turno', hidden: true},
             {name: 'nombre_evento', index: 'nombre_evento', align: 'center', width: 400},
             {name: 'check', index: 'check', align: 'center', width: 200},
-            {name: 'id_asistencia', index: 'id_asistencia', align: 'center', width: 10, hidden:true}
+            {name: 'id_asistencia', index: 'id_asistencia', align: 'center', width: 10, hidden:true},
+            {name: 'desc_turno', index: 'desc_turno', align: 'center', width: 90}
         ],
         pager: '#pager_table_detalle_asistencia',
         rowList: [5, 10, 15, 20],

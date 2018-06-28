@@ -107,6 +107,7 @@ class AsistenciaController extends Controller
                 trim($Datos->nombre_evento),
                 '<div class="checkbox"><label><input name="estado_asistencia" id_turno = '.$Datos->id_turno.' id_usuario = '.$Datos->id_usuario.' type="checkbox"  "></label></div>',
                 $variable,
+                trim($Datos->desc_turno),
             );
         }
 
@@ -255,6 +256,7 @@ class AsistenciaController extends Controller
                 trim($Datos->nombre_evento),
                 $nuevo,
                 trim($Datos->id_asistencia),
+                trim($Datos->desc_turno),
             );
         }
 
