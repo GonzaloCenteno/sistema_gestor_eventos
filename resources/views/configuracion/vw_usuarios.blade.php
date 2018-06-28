@@ -12,7 +12,7 @@
                 <div class="col-xs-6">
                         <div class="input-group">
                             <div class="icon-addon addon-md">
-                                <input id="vw_user_txt_buscar" type="text" class="form-control" placeholder="Ingresar Nombre de Usuario">
+                                <input id="vw_user_txt_buscar" type="text" class="form-control text-center text-uppercase" placeholder="Ingresar Nombre de Usuario">
                             </div>
                             <span class="input-group-btn">
                                 <button onclick="buscar_user();" type="button" class="btn btn-default btn-round"><i class="material-icons">search</i> Buscar</button>
@@ -286,21 +286,80 @@
                             <div class="col-sm-12">
                                 <div class="input-group">
                                     <span class="input-group-addon">
-                                        <i class="material-icons">settings</i>
+                                        <i class="material-icons">person_add</i>
                                     </span>
-                                    <input type="text" id="dlg_nombre_completo" class="form-control" placeholder="Nombre Completo">
+                                    <input type="text" id="dlg_nombre_completo" class="form-control text-center text-uppercase" placeholder="ESCRIBIR NOMBRE COMPLETO">
                                 </div>
                             </div>
 
                             <div class="col-sm-12">
                                 <div class="input-group">
                                     <span class="input-group-addon">
-                                        <i class="material-icons">settings</i>
+                                        <i class="material-icons">email</i>
                                     </span>
-                                    <input type="email" id="dlg_email" class="form-control" placeholder="Correo Electronico">
+                                    <input type="email" id="dlg_email" class="form-control text-center text-uppercase" placeholder="CORREO ELECTRONICO">
                                 </div>
                             </div>
-
+                            
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">book</i>
+                                        </span>
+                                        <div class="form-group">
+                                            <label for="exampleFormControlSelect3">TIPO PERSONA</label>
+                                            <select class="form-control" id="dlg_tipo_persona">
+                                                <option value='PONENTE' >PONENTE</option>
+                                                <option value='CAJERO' >CAJERO</option>
+                                                <option value='PERSONA NATURAL' >PERSONA NATURAL</option>
+                                            </select>
+                                          </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">book</i>
+                                        </span>
+                                        <div class="form-group">
+                                            <label for="exampleFormControlSelect5">NACIONALIDAD</label>
+                                            <select class="form-control" id="dlg_nacionalidad">
+                                                <option value='PERUANA' >PERUANA</option>
+                                                <option value='EUROPEA' >EUROPEA</option>
+                                                <option value='ESTADO UNIDENSE' >ESTADO UNIDENSE</option>
+                                            </select>
+                                          </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">book</i>
+                                        </span>
+                                        <div class="form-group">
+                                            <label for="exampleFormControlSelect8">TIPO DOCUMENTO</label>
+                                            <select class="form-control" id="dlg_tipo_documento">
+                                                <option value='DNI' >DNI</option>
+                                                <option value='RUC' >RUC</option>
+                                                <option value='CARNET EXTRANJERIA' >CARNET EXTRANJERIA</option>
+                                            </select>
+                                          </div>
+                                    </div>
+                                </div>
+                            </div>
+   
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="material-icons">featured_play_list</i>
+                                    </span>
+                                    <input id="dlg_numero_identidad" type="text" placeholder="NUMERO IDENTIDAD" class="form-control text-center" onkeypress="return soloNumeroTab(event);">
+                                </div>
+                            </div>
+                        
                         </div>
                     </div>
                 </div>

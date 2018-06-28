@@ -24,7 +24,7 @@ class UsuariosController extends Controller
     public function getUsuarios(Request $request)
     {
         $user = $request['user'];
-        $totalg = DB::select("select count(id) as total from vw_usuarios where name like '%".$user."%'");
+        $totalg = DB::select("select count(id) as total from vw_usuarios where name like '%".strtoupper($user)."%'");
         $page = $_GET['page'];
         $limit = $_GET['rows'];
         $sidx = $_GET['sidx'];
@@ -46,7 +46,7 @@ class UsuariosController extends Controller
             $start = 0;
         }
 
-        $sql = DB::table('public.vw_usuarios')->where('name','like','%'.$user.'%')->orderBy($sidx, $sord)->limit($limit)->offset($start)->get();
+        $sql = DB::table('public.vw_usuarios')->where('name','like','%'.strtoupper($user).'%')->orderBy($sidx, $sord)->limit($limit)->offset($start)->get();
         $Lista = new \stdClass();
         $Lista->page = $page;
         $Lista->total = $total_pages;
@@ -80,9 +80,13 @@ class UsuariosController extends Controller
     public function create(Request $request)
     {
         $data = new Usuarios_u();
-        $data->name     = $request['usuario'];
+        $data->name     = strtoupper($request['usuario']);
         $data->email    = $request['email'];
-        $data->password = bcrypt('123456');
+        $data->password = bcrypt($request['numero_identidad']);
+        $data->tipo_persona = $request['tipo_persona'];
+        $data->nacionalidad = $request['nacionalidad'];
+        $data->tip_doc_ident = $request['tipo_documento'];
+        $data->num_ident = $request['numero_identidad'];
         $data->save();
         return $data->id;
     }

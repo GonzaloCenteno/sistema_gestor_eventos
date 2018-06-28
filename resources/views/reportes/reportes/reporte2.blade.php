@@ -52,7 +52,7 @@
               <td style="text-align: center;font-size: 0.7em; padding: 0px;">{{$rep->num_ident}}</td>
               <td style="text-align: left;font-size: 0.7em; padding: 0px;">{{strtoupper($rep->name)}}</td>
               <td style="text-align: left;font-size: 0.7em; padding: 0px;">
-                   <img style="width: 100px; height: 100px;" src="data:image/png;base64, {{ base64_encode(\QrCode::format('png')->generate($rep[0]->qr))}} ">
+                   <img style="width: 80px; height: 80px;" src="data:image/png;base64, {{ base64_encode(\QrCode::format('png')->generate($rep->qr))}} ">
               </td>
 
           </tr>

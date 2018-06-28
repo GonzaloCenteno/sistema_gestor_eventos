@@ -558,7 +558,7 @@ function actbtn(id,tip)
 
 function open_dialog_new_edit_Usuario() {
     $("#dialog_new_edit_Usuario").dialog({
-        autoOpen: false, modal: true, width: 550, 
+        autoOpen: false, modal: true, width: 750, 
         show:{ effect: "explode", duration: 400},
         hide:{ effect: "explode", duration: 400}, resizable: false,
         title: ".: NUEVO USUARIO :.",
@@ -586,12 +586,16 @@ function open_dialog_new_edit_Usuario() {
 
 function save_nuevo_usuario() {
 
-    $("#dlg_nombre_completo").val();
-    $("#dlg_email").val();
+    nombre = $("#dlg_nombre_completo").val();
+    email = $("#dlg_email").val();
+    tipo_persona = $("#dlg_tipo_persona").val();
+    nacionalidad = $("#dlg_nacionalidad").val();
+    tipo_documento = $("#dlg_tipo_documento").val();
+    numero_identidad = $("#dlg_numero_identidad").val();
 
     if ($("#dlg_nombre_completo").val() == '' || $("#dlg_nombre_completo").val().length <= 2) {
         MensajeDialogLoadAjaxFinish('table_Usuarios');
-        mostraralertasconfoco('* El Campo Nombre es Obligatorio y mas de 2 Caracteres...', 'dlg_nombre_completo');
+        mostraralertasconfoco('* El Campo Nombre es Obligatorio y mas de 2 Caracteres...', '#dlg_nombre_completo');
         return false;
     }
 
@@ -600,12 +604,25 @@ function save_nuevo_usuario() {
         mostraralertasconfoco("* El Campo Email es Obligatorio","#dlg_email");
         return false;
     }
+    
+    if(numero_identidad == '')
+    {
+        mostraralertasconfoco("* El Campo Numero de Identidad es Obligatorio","#dlg_numero_identidad");
+        return false;
+    }
 
     MensajeDialogLoadAjax('table_Usuarios', '.:: Cargando ...');
     $.ajax({
         url: 'usuarios/create',
         type: 'GET',
-        data: {usuario:$("#dlg_nombre_completo").val(),email:$("#dlg_email").val()},
+        data: {
+               usuario:nombre,
+               email:email,
+               tipo_persona:tipo_persona,
+               nacionalidad:nacionalidad,
+               tipo_documento:tipo_documento,
+               numero_identidad:numero_identidad
+        },
         success: function(r) 
         {
             MensajeExito("Se Guardo Correctamente","Su Registro Fue Insertado Correctamente...","top","right","success");

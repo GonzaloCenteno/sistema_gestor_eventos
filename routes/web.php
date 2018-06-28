@@ -123,3 +123,8 @@ Route::group(['namespace' => 'control'], function() {
         Route::get('autocompletar_materiales', 'AsistenciaController@autocompletar_materiales');
         Route::get('agregar_materiales_asistencia/{id_asistencia}', 'AsistenciaController@agregar_materiales_asistencia');
 });
+
+Route::group(['namespace' => 'reportes'], function() {
+        Route::resource('reportes', 'ReportesController');
+        Route::get('ver_reporte/{tipo}', 'ReportesController@ver_reporte');
+});

@@ -77,8 +77,24 @@ function detalle_recibo_eventos() {
             $("#btn_eliminar_din_" + i).hide();
         }
     }
+    limpiar_datos_detalle();
 }
 
+function limpiar_datos_detalle(){
+    $("#cantidad").val('');
+    $("#buscar_evento").val('').focus();
+    $("#hiddenbuscar_evento").val('');
+    
+    swal({
+        position: 'top-end',
+        type: 'success',
+        title: 'EVENTO AGREGADO',
+        showConfirmButton: false,
+        timer: 1500
+      });
+      var audio = document.getElementById("audio_smallbox");
+      audio.play();
+}
 function btn_borrar_detalle(num) {
     cont--;
     ultimo_soles = $("#sub_tot_din_" + num).val();
@@ -97,25 +113,12 @@ function grabar_datos(){
     evento = $("#buscar_evento").val();
     id_evento = $("#hiddenbuscar_evento").val();
     
-    if (id_evento == "0") {
-        mostraralertasconfoco('Ingrese Nombre Evento...', '#buscar_evento');
-        return false;
-    }
-    
-    if (isNaN(cantidad)) {
-        mostraralertasconfoco('Ingrese Cantidad...', '#cantidad');
-        return false;
-    }
-    
+
     if (monto == "") {
-        mostraralertasconfoco('Ingrese Nombre Evento...', '#valor');
+        mostraralertasconfoco('* NO HAY NINGUN MONTO REGISTRADO...', '#valor');
         return false;
     }
     
-    if (evento == "0") {
-        mostraralertasconfoco('Ingrese Nombre Evento...', '#buscar_evento');
-        return false;
-    }
     
     $.ajax({
         url: 'insertar_datos_recibo',
@@ -179,5 +182,5 @@ function limpiar_datos(){
     $("#cantidad").val('');
     $("#buscar_evento").val('');
     $("#hiddenbuscar_evento").val('');
-    $("#tabla_detalle").empty()
+    $("#tabla_detalle").empty();
 }
