@@ -20,7 +20,8 @@ class ReportesController extends Controller
         }
           $TIP =  DB::table('users')->orderBy('tipo_persona', 'desc')->get();
           $evento =  DB::table('vw_eventos')->orderBy('nombre_evento', 'desc')->get();
-
+        $materiales=  DB::table('materiales')->orderBy('nombre_material', 'desc')->get();
+ 
         return view('reportes/vw_reportes', compact('menu','permisos','evento'));
     }
 
@@ -30,9 +31,9 @@ class ReportesController extends Controller
         if($tip=='2'){  return $this->rep_2($request);  }
         if($tip=='3'){  return $this->rep_3($request);  }
         if($tip=='4'){  return $this->rep_4($request);  }
-        if($tip=='4'){  return $this->rep_11($request);  }
-        if($tip=='4'){  return $this->rep_12($request);  }
-        if($tip=='4'){  return $this->rep_13($request);  }
+        if($tip=='11'){ return $this->rep_11($request);  }
+        if($tip=='12'){  return $this->rep_12($request);  }
+        if($tip=='13'){  return $this->rep_13($request);  }
         if($tip=='4'){  return $this->rep_14($request);  }
         if($tip=='4'){  return $this->rep_15($request);  }
         if($tip=='4'){  return $this->rep_16($request);  }
@@ -53,7 +54,8 @@ class ReportesController extends Controller
         $evento = $request['evento'];
         $tipo = $request['tipo'];
         $fechainicio = $request['ini'];
-        $fechafin = $request['fin'];        $sql = DB::select(" select name,num_ident  from vw_reporte1 WHERE tipo_persona = '$tipo' and id_evento = '$evento' and fecha_registro between '$fechainicio' and '$fechafin' " );
+        $fechafin = $request['fin'];       
+        $sql = DB::select(" select name,num_ident  from vw_reporte1 WHERE tipo_persona = '$tipo' and id_evento = '$evento' and fecha_registro between '$fechainicio' and '$fechafin' " );
             if(count($sql)>0)
             {
                 $aux='0';
@@ -101,7 +103,74 @@ class ReportesController extends Controller
                 return 'NO HAY RESULTADOS';
             }
     }
-    
+    public function rep_4(Request $request)
+    {
+        
+        $sql = DB::select(" select *  from vw_reporte4 " );
+            if(count($sql)>0)
+            {
+                $aux='0';
+                $view =  \View::make('reportes.reportes.reporte4', compact('sql','evento'))->render();
+                $pdf = \App::make('dompdf.wrapper');
+                $pdf->loadHTML($view)->setPaper('a4');
+                return $pdf->stream("REPORTE".".pdf");
+            }
+            else
+            {
+                return 'NO HAY RESULTADOS';
+            }
+    }
+    public function rep_11(Request $request)
+    {
+        
+        $sql = DB::select(" select *  from vw_rep_eventos_contratados " );
+            if(count($sql)>0)
+            {
+                $aux='0';
+                $view =  \View::make('reportes.reportes.reporte11', compact('sql'))->render();
+                $pdf = \App::make('dompdf.wrapper');
+                $pdf->loadHTML($view)->setPaper('a4');
+                return $pdf->stream("REPORTE".".pdf");
+            }
+            else
+            {
+                return 'NO HAY RESULTADOS';
+            }
+    }
+     public function rep_12(Request $request)
+    {
+        $evento = $request['evento'];
+        $sql = DB::select(" select *  from vw_rep_eventos_contratados  WHERE  id_evento = '$evento' " );
+            if(count($sql)>0)
+            {
+                $aux='0';
+                $view =  \View::make('reportes.reportes.reporte12', compact('sql'))->render();
+                $pdf = \App::make('dompdf.wrapper');
+                $pdf->loadHTML($view)->setPaper('a4');
+                return $pdf->stream("REPORTE".".pdf");
+            }
+            else
+            {
+                return 'NO HAY RESULTADOS';
+            }
+    }
+    public function rep_13(Request $request)
+    {
+        $evento = $request['evento'];
+        $sql = DB::select(" select *  from vw_evento_x_dia   WHERE  id_evento = '$evento' " );
+            if(count($sql)>0)
+            {
+                $aux='0';
+                $view =  \View::make('reportes.reportes.reporte13', compact('sql'))->render();
+                $pdf = \App::make('dompdf.wrapper');
+                $pdf->loadHTML($view)->setPaper('a4');
+                return $pdf->stream("REPORTE".".pdf");
+            }
+            else
+            {
+                return 'NO HAY RESULTADOS';
+            }
+    }
     
     
     

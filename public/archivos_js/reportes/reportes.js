@@ -5,24 +5,22 @@ function dlg_reportes(tipo)
     if(tipo == 3) { abrir3(); }
     if(tipo == 4)
     {
-       window.open('ver_rep_tesoreria/1?ini='+$("#fec_ini").val()+'&fin='+$("#fec_fin").val()+'&caja='+$("#select_agencia_p").val());
+       window.open('ver_reporte/4');
        return false;
     }
-    
     if(tipo == 11)
     {
-       window.open('ver_rep_tesoreria/1?ini='+$("#fec_ini").val()+'&fin='+$("#fec_fin").val()+'&caja='+$("#select_agencia_p").val());
+       window.open('ver_reporte/11');
        return false;
     }
     if(tipo == 12){abrir12(); }
     if(tipo == 13)
     {
-       window.open('ver_rep_tesoreria/1?ini='+$("#fec_ini").val()+'&fin='+$("#fec_fin").val()+'&caja='+$("#select_agencia_p").val());
-       return false;
+       {abrir13(); }
     }
     if(tipo == 14)
     {
-       window.open('ver_rep_tesoreria/1?ini='+$("#fec_ini").val()+'&fin='+$("#fec_fin").val()+'&caja='+$("#select_agencia_p").val());
+       window.open('ver_reporte/1?ini='+$("#fec_ini").val()+'&fin='+$("#fec_fin").val()+'&caja='+$("#select_agencia_p").val());
        return false;
     }
     if(tipo == 15) { abrir15();}
@@ -116,13 +114,29 @@ function abrir3()
 }
 function abrir12()
 {
-    $("#dialog_1").dialog({
+    $("#dialog_12").dialog({
         autoOpen: false, modal: true, width: 600, show: {effect: "fade", duration: 300}, resizable: false,
         title: ".:REPORTE:",
         buttons: [{
             html: "<i class='fa fa-save'></i>&nbsp; Ver Reporte"  ,
             "class": "btn btn-success bg-color-green",
             click: function () { abrir_reporte(12); }
+        }, {
+            html: "<i class='fa fa-sign-out'></i>&nbsp; Salir",
+            "class": "btn btn-danger",
+            click: function () { $(this).dialog("close"); }
+        }]
+    }).dialog('open');
+}
+function abrir13()
+{
+    $("#dialog_13").dialog({
+        autoOpen: false, modal: true, width: 600, show: {effect: "fade", duration: 300}, resizable: false,
+        title: ".:REPORTE:",
+        buttons: [{
+            html: "<i class='fa fa-save'></i>&nbsp; Ver Reporte"  ,
+            "class": "btn btn-success bg-color-green",
+            click: function () { abrir_reporte(13); }
         }, {
             html: "<i class='fa fa-sign-out'></i>&nbsp; Salir",
             "class": "btn btn-danger",
@@ -277,7 +291,12 @@ function abrir_reporte(tipo)
     }
     if(tipo==12)
     {       
-       window.open('ver_rep_tesoreria/1?ini='+$("#fec_ini").val()+'&fin='+$("#fec_fin").val()+'&caja='+$("#select_agencia_p").val());
+       window.open('ver_reporte/12?evento='+$("#select_evento12").val());
+       return false;
+    }
+    if(tipo==13)
+    {       
+       window.open('ver_reporte/13?evento='+$("#select_evento13").val());
        return false;
     }
     if(tipo==15)

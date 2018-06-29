@@ -29,7 +29,7 @@
             
         </table>
         
-        <center><div Class="asunto" style="margin-top: 0px;"><b>Reporte Inscritos con sus respectivos código de barras o códigos QR 
+        <center><div Class="asunto" style="margin-top: 0px;"><b>Seleccionando un día del evento, debe mostrar el detalle del mismo
                 </b></div></center>
         <br>             
          
@@ -38,9 +38,11 @@
         <thead>
           <tr>
               <th style="width: 5%">N°</th>
-              <th style="width: 7%">DNI</th>
-              <th style="width: 75%">Nombre</th>
-              <th style="width: 7%">QR</th>
+              <th style="width: 40%">EVENTO</th>
+              <th style="width: 40%">TURNOS</th>
+              <th style="width: 40%">ACTIVIDAD</th>
+              <th style="width: 40%">AUDITORIO</th>
+
               
           </tr>
         </thead>
@@ -49,11 +51,12 @@
           @foreach ($sql as $rep)
           <tr>
               <td style="text-align: center;font-size: 0.7em; padding: 0px;">{{$num++}}</td>
-              <td style="text-align: center;font-size: 0.7em; padding: 0px;">{{$rep->num_ident}}</td>
-              <td style="text-align: left;font-size: 0.7em; padding: 0px;">{{strtoupper($rep->name)}}</td>
-              <td style="text-align: center;font-size: 0.7em; padding: 0px;">
-                   <img style="width: 80px; height: 80px;" src="data:image/png;base64, {{ base64_encode(\QrCode::format('png')->generate($rep->qr))}} ">
-              </td>
+              <td style="text-align: center;font-size: 0.7em; padding: 0px;">{{$rep->nombre_evento}}</td>
+               <td style="text-align: center;font-size: 0.7em; padding: 0px;">{{strtoupper($rep->desc_turno)}}</td>
+              <td style="text-align: center;font-size: 0.7em; padding: 0px;">{{strtoupper($rep->nombre_actividad)}}</td>
+              <td style="text-align: center;font-size: 0.7em; padding: 0px;">{{strtoupper($rep->nombre_auditorio)}}</td>
+
+
 
           </tr>
           @endforeach

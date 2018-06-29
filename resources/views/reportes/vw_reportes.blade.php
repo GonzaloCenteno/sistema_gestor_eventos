@@ -250,7 +250,7 @@
                         <div class="input-group input-group-md" style="width: 98%">
                             <span class="input-group-addon" style="width: 165px">Fecha inicio &nbsp;<i class="fa fa-calendar"></i></span>
                             <div>
-                            <input id="fec_ini_1" name="dlg_fec" type="text"   class="datepicker text-center" data-dateformat='dd/mm/yy' data-mask="99/99/9999" style="height: 32px; width: 100%" placeholder="--/--/----" value="{{date('01/m/Y')}}">
+                            <input id="fec_ini_1" name="dlg_fec" type="date"   class="datepicker text-center" data-dateformat='dd/mm/yy' data-mask="99/99/9999" style="height: 32px; width: 100%" placeholder="--/--/----" value="{{date('01/m/Y')}}">
                             </div>
                         </div>
                     </div>
@@ -258,7 +258,7 @@
                         <div class="input-group input-group-md" style="width: 98%">
                             <span class="input-group-addon" style="width: 165px">Fecha fin &nbsp;<i class="fa fa-calendar"></i></span>
                             <div>
-                            <input id="fec_fin_1" name="dlg_fec" type="text"   class="datepicker text-center" data-dateformat='dd/mm/yy' data-mask="99/99/9999" style="height: 32px; width: 100%" placeholder="--/--/----" value="{{date('d/m/Y')}}">
+                            <input id="fec_fin_1" name="dlg_fec" type="date"   class="datepicker text-center" data-dateformat='dd/mm/yy' data-mask="99/99/9999" style="height: 32px; width: 100%" placeholder="--/--/----" value="{{date('d/m/Y')}}">
                             </div>
                         </div>
                     </div>
@@ -308,6 +308,58 @@
                                 <label class="select" >
                                     <select id='select_evento3' class="form-control col-lg-10" >
                                 <option value='0'>-- TODOS --</option>
+                                @foreach ($evento as $ev)
+                                    <option value='{{$ev->id_evento}}' >{{$ev->nombre_evento}}</option>
+                                @endforeach
+                            </select><i></i> </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end widget div -->
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dialog_12" style="display: none">
+    <div class="widget-body">
+        <div  class="smart-form">
+            <div class="panel-group">
+                <!-- widget div-->
+                <div class="row" style="padding: 10px 30px;">
+                   <div class="col-xs-12" style="padding: 0px; margin-top: 10px; ">
+                        <div class="input-group input-group-md" style="width: 100%">
+                            <span class="input-group-addon" style="width: 165px">Evento &nbsp;<i class="fa fa-users"></i></span>
+                            <div>
+                                <label class="select" >
+                                    <select id='select_evento12' class="form-control col-lg-10" >
+                                <option value='0'>-- seleccionar --</option>
+                                @foreach ($evento as $ev)
+                                    <option value='{{$ev->id_evento}}' >{{$ev->nombre_evento}}</option>
+                                @endforeach
+                            </select><i></i> </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end widget div -->
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dialog_13" style="display: none">
+    <div class="widget-body">
+        <div  class="smart-form">
+            <div class="panel-group">
+                <!-- widget div-->
+                <div class="row" style="padding: 10px 30px;">
+                   <div class="col-xs-12" style="padding: 0px; margin-top: 10px; ">
+                        <div class="input-group input-group-md" style="width: 100%">
+                            <span class="input-group-addon" style="width: 165px">Evento &nbsp;<i class="fa fa-users"></i></span>
+                            <div>
+                                <label class="select" >
+                                    <select id='select_evento13' class="form-control col-lg-10" >
+                                <option value='0'>-- seleccionar --</option>
                                 @foreach ($evento as $ev)
                                     <option value='{{$ev->id_evento}}' >{{$ev->nombre_evento}}</option>
                                 @endforeach

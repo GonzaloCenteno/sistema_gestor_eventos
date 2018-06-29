@@ -29,7 +29,7 @@
             
         </table>
         
-        <center><div Class="asunto" style="margin-top: 0px;"><b>Reporte Inscritos con sus respectivos código de barras o códigos QR 
+        <center><div Class="asunto" style="margin-top: 0px;"><b>Listado de eventos contratados, 
                 </b></div></center>
         <br>             
          
@@ -38,9 +38,9 @@
         <thead>
           <tr>
               <th style="width: 5%">N°</th>
-              <th style="width: 7%">DNI</th>
-              <th style="width: 75%">Nombre</th>
-              <th style="width: 7%">QR</th>
+              <th style="width: 40%">NOMBRE</th>
+              <th style="width: 40%">EVENTO</th>
+              
               
           </tr>
         </thead>
@@ -49,11 +49,10 @@
           @foreach ($sql as $rep)
           <tr>
               <td style="text-align: center;font-size: 0.7em; padding: 0px;">{{$num++}}</td>
-              <td style="text-align: center;font-size: 0.7em; padding: 0px;">{{$rep->num_ident}}</td>
-              <td style="text-align: left;font-size: 0.7em; padding: 0px;">{{strtoupper($rep->name)}}</td>
-              <td style="text-align: center;font-size: 0.7em; padding: 0px;">
-                   <img style="width: 80px; height: 80px;" src="data:image/png;base64, {{ base64_encode(\QrCode::format('png')->generate($rep->qr))}} ">
-              </td>
+              <td style="text-align: center;font-size: 0.7em; padding: 0px;">{{$rep->name}}</td>
+              <td style="text-align: center;font-size: 0.7em; padding: 0px;">{{strtoupper($rep->nombre_evento)}}</td>
+
+
 
           </tr>
           @endforeach
