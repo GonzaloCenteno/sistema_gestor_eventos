@@ -364,7 +364,7 @@
                                     <option value='{{$ev->id_evento}}' >{{$ev->nombre_evento}}</option>
                                 @endforeach
                             </select><i></i> </label>
-                            </div>
+                            </div> 
                         </div>
                     </div>
                 </div>
